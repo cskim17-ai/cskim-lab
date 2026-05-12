@@ -10,11 +10,13 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
+    # 배포에 필요한 최소 권한 설정
     permissions:
       contents: read
       pages: write
       id-token: write
 
+    # Node.js 20 경고를 무시하고 24 런타임을 강제하는 환경 변수 (유지)
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -25,16 +27,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '24' # 최신 노드 버전 사용
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci # npm install보다 빠르고 안정적인 ci 권장
 
       - name: Build
         run: npm run build
         env:
-          # GitHub Secrets에 등록하신 값들을 빌드 시점에 주입합니다.
+          # 기존에 설정하신 환경변수들 그대로 유지
           VITE_ADMIN_PASSWORD: ${{ secrets.VITE_ADMIN_PASSWORD }}
           VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
           VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
@@ -50,6 +52,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # 빌드 결과 폴더가 dist가 맞는지 확인하세요 (Vite는 보통 dist입니다)
           path: './dist'
 
       - name: Deploy to GitHub Pages
