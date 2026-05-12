@@ -53,7 +53,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
-          srchView: path.resolve(__dirname, 'srch-view.html')
         }
       }
     }
