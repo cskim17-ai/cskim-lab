@@ -92,14 +92,12 @@ class Cache {
 export const globalCache = new Cache();
 
 /**
- * 골프장 목록 캐시 키
+ * 캐시 키 설정
  */
 export const CACHE_KEYS = {
-  GOLF_COURSES: 'golf_courses',
   GALLERY_TOPICS: 'gallery_topics',
   VIDEO_TOPICS: 'video_topics',
   NOTICES: 'notices',
-  GOLFER_QUOTES: 'golfer_quotes',
   BOOKING_REQUESTS: 'booking_requests',
   QUOTES: 'quotes',
   CHATTING_DATA: 'chatting_data'

@@ -17,17 +17,16 @@ import firebaseConfig from '../../firebase-applet-config.json';
 import AdminLab from '../components/AdminLab';
 import AdminNFCTags from '../components/AdminNFCTags';
 import AdminTodoList from '../components/AdminTodoList';
-import AdminChartDashboard from '../components/AdminChartDashboard';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState<'nfcTags' | 'lab' | 'vibeCoding' | 'chartDashboard'>(() => {
+  const [activeTab, setActiveTab] = useState<'nfcTags' | 'lab' | 'vibeCoding'>(() => {
     const saved = localStorage.getItem('lastAdminTab');
-    if (saved && ['nfcTags', 'lab', 'vibeCoding', 'chartDashboard'].includes(saved)) {
-      return saved as 'nfcTags' | 'lab' | 'vibeCoding' | 'chartDashboard';
+    if (saved && ['nfcTags', 'lab', 'vibeCoding'].includes(saved)) {
+      return saved as 'nfcTags' | 'lab' | 'vibeCoding';
     }
     return 'nfcTags';
   });
@@ -57,7 +56,6 @@ export default function Admin() {
       label: '바이브코딩1',
       items: [
         { id: 'vibeCoding', label: '1.할일목록' },
-        { id: 'chartDashboard', label: '2.차트대시보드' },
       ]
     }
   ];
@@ -247,7 +245,6 @@ export default function Admin() {
           {activeTab === 'lab' && <AdminLab showAlert={showAlert} showConfirm={showConfirm} />}
           {activeTab === 'nfcTags' && <AdminNFCTags showAlert={showAlert} showConfirm={showConfirm} />}
           {activeTab === 'vibeCoding' && <AdminTodoList showAlert={showAlert} showConfirm={showConfirm} />}
-          {activeTab === 'chartDashboard' && <AdminChartDashboard />}
         </div>
       </main>
 

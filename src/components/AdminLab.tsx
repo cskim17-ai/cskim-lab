@@ -42,7 +42,9 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
     if (selectedNfcId) {
       const baseUrl = window.location.origin;
       const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
-      const url = `${baseUrl}${basePath}/srch-view.html?desk_id=${selectedNfcId}`;
+      // srch-view.html이 삭제되었으므로 메인 페이지로 연결하거나 다른 처리가 필요할 수 있습니다.
+      // 현재는 메인 페이지로 연결되도록 수정합니다.
+      const url = `${baseUrl}${basePath}/?desk_id=${selectedNfcId}`;
       setNfcTaggingUrl(url);
     }
   }, [selectedNfcId]);
