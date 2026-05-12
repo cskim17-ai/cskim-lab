@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    // 2. 깃허브 페이지 배포를 위한 베이스 경로 설정 (AI Studio 미리보기 환경에서는 '/' 사용)
-    base: process.env.GITHUB_ACTIONS ? '/cskim-lab/' : '/', 
+    // 2. 깃허브 페이지 배포를 위한 베이스 경로 설정
+    base: process.env.NODE_ENV === 'production' ? '/cskim-lab/' : '/', 
     
     plugins: [
       react(), 
