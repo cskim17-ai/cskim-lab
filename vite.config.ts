@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     // 2. 깃허브 페이지 배포를 위한 베이스 경로 설정 (AI Studio 미리보기 환경에서는 '/' 사용)
-    base: process.env.GITHUB_ACTIONS ? '/jb-golf-admin/' : '/', 
+    base: process.env.GITHUB_ACTIONS ? '/cskim-lab/' : '/', 
     
     plugins: [
       react(), 
