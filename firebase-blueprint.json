@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "config_desk": {
+      "title": "NFC Tag/Desk Config",
+      "description": "Configuration for NFC tags and identified desks",
+      "type": "object",
+      "properties": {
+        "nfc_id": { "type": "string" },
+        "authorized_mac": { "type": "string" },
+        "pc_name": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive", "maintenance"] },
+        "last_login": { "type": "string" },
+        "po_number": { "type": "string" },
+        "department": { "type": "string" },
+        "assigned_user": { "type": "string" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nfc_id", "authorized_mac", "pc_name", "status", "updated_at"]
+    },
+    "active_session": {
+      "title": "Active NFC Session",
+      "description": "State of an active session triggered by NFC tagging",
+      "type": "object",
+      "properties": {
+        "desk_id": { "type": "string" },
+        "content": { "type": "string" },
+        "url": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["desk_id", "content", "url", "updatedAt"]
+    },
+    "accessConfig": {
+      "title": "Access Config",
+      "description": "Whitelist of allowed admin emails",
+      "type": "object",
+      "properties": {
+        "allowedUsers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "logo": {
+       "title": "Logo Setting",
+       "description": "Global logo URL setting",
+       "type": "object",
+       "properties": {
+         "logoUrl": { "type": "string" }
+       }
+    },
+    "todo": {
+      "title": "Todo Item",
+      "description": "A task in the todo list",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["id", "text", "completed", "createdAt", "userId", "order"]
+    }
+  },
+  "firestore": {
+    "config_desks/{deskId}": {
+      "schema": "config_desk",
+      "description": "NFC tags configuration"
+    },
+    "active_session/{sessionId}": {
+      "schema": "active_session",
+      "description": "Real-time sessions for desk displays"
+    },
+    "settings/accessConfig": {
+      "schema": "accessConfig",
+      "description": "Admin access configuration"
+    },
+    "settings/logo": {
+      "schema": "logo",
+      "description": "App logo configuration"
+    },
+    "todos/{todoId}": {
+      "schema": "todo",
+      "description": "User todo list items"
+    }
+  }
+}

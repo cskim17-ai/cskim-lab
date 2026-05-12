@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isEmailVerified() && (
+        request.auth.token.email == 'cskim1747@gmail.com' ||
+        exists(/databases/$(database)/documents/settings/accessConfig) && 
+        request.auth.token.email in get(/databases/$(database)/documents/settings/accessConfig).data.allowedUsers
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Chatting Collection
+    match /chatting/{chatId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin() && isValidId(chatId) && isValidChatting(incoming());
+      allow update: if isAdmin() && isValidChatting(incoming()) && 
+                    incoming().id == existing().id; // Immutable ID
+      allow delete: if isAdmin();
+
+      function isValidChatting(data) {
+        return data.keys().hasAll(['id', 'name_ko', 'region_tag', 'price_wd_am', 'total_holes', 'image_url_main', 'location', 'main_features', 'expert_pros', 'contact_no', 'map_url', 'search_keywords']) &&
+               data.keys().size() <= 16 &&
+               data.id is string && data.id.size() <= 100 &&
+               data.name_ko is string && data.name_ko.size() <= 200 &&
+               data.region_tag is string && data.region_tag.size() <= 50 &&
+               data.price_wd_am is number &&
+               data.total_holes is number &&
+               data.image_url_main is string &&
+               data.location is string &&
+               data.main_features is string &&
+               data.expert_pros is string &&
+               data.contact_no is string &&
+               data.map_url is string &&
+               data.search_keywords is string;
+      }
+    }
+
+    // Config Desks
+    match /config_desks/{deskId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin() && isValidConfigDesk(incoming());
+      allow update: if isAdmin() && isValidConfigDesk(incoming());
+      allow delete: if isAdmin();
+
+      function isValidConfigDesk(data) {
+        return data.nfc_id is string && data.nfc_id.size() <= 100 &&
+               data.pc_name is string && data.pc_name.size() <= 100 &&
+               data.status in ['active', 'inactive', 'maintenance'] &&
+               data.updated_at is string; // ISO string
+      }
+    }
+
+    // Active Sessions
+    match /active_sessions/{sessionId} {
+      // Publicly readable for kiosks/viewers
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create, update: if isAdmin() && isValidActiveSession(incoming());
+      allow delete: if isAdmin();
+
+      function isValidActiveSession(data) {
+        return data.desk_id is string && data.desk_id.size() <= 100 &&
+               data.content is string && data.content.size() <= 100000 &&
+               data.url is string && data.url.size() <= 2000 &&
+               data.updatedAt is string;
+      }
+    }
+
+    // Settings
+    match /settings/accessConfig {
+      allow read: if true; // Allowed because app needs it to determine login flow
+      allow write: if isAdmin();
+    }
+
+    match /settings/logo {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Connection test
+    match /test/connection {
+      allow get: if true;
+    }
+  }
+}

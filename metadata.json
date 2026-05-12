@@ -1,0 +1,6 @@
+{
+  "name": "cskim-lab",
+  "description": "Professional admin dashboard for cskim-lab, featuring real-time lab tools and NFC tag management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
