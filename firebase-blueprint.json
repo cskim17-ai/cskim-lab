@@ -58,6 +58,87 @@
         "order": { "type": "integer" }
       },
       "required": ["id", "text", "completed", "createdAt", "userId", "order"]
+    },
+    "gas_receipt": {
+      "title": "Gas Receipt",
+      "description": "A gas fueling receipt record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "stationName": { "type": "string" },
+        "amount": { "type": "integer" },
+        "liters": { "type": "number" },
+        "fuelType": { "type": "string", "enum": ["Gasoline", "Diesel", "LPG", "Premium"] },
+        "unitPrice": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "date", "stationName", "amount", "createdAt", "userId"]
+    },
+    "palette": {
+      "title": "Color Palette",
+      "description": "A collection of colors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "colors": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "colors", "createdAt", "userId"]
+    },
+    "map_marker": {
+      "title": "Map Marker",
+      "description": "A pinned location on the map with a memo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "memo": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "lat", "lng", "memo", "createdAt", "userId"]
+    },
+    "chat_message": {
+      "title": "AI Chat Message",
+      "description": "A message in an AI chat conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "role", "text", "createdAt", "userId"]
+    },
+    "classic_chat_message": {
+      "title": "Classic Chat Message",
+      "description": "A message in a real-time multi-user chat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nickname": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "nickname", "text", "createdAt", "userId"]
+    },
+    "chat_presence": {
+      "title": "Chat Presence",
+      "description": "Heartbeat and presence data for online users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "nickname": { "type": "string" },
+        "lastSeen": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "nickname", "lastSeen"]
     }
   },
   "firestore": {
@@ -77,9 +158,43 @@
       "schema": "logo",
       "description": "App logo configuration"
     },
-    "todos/{todoId}": {
+    "todos/{dateId}": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        }
+      },
+      "description": "Daily todo container"
+    },
+    "todos/{dateId}/items/{itemId}": {
       "schema": "todo",
-      "description": "User todo list items"
+      "description": "Specific todo items for a date"
+    },
+    "gas_receipts/{receiptId}": {
+      "schema": "gas_receipt",
+      "description": "Gas fueling receipts"
+    },
+    "palettes/{paletteId}": {
+      "schema": "palette",
+      "description": "User color palettes"
+    },
+    "map_markers/{markerId}": {
+      "schema": "map_marker",
+      "description": "User saved map markers"
+    },
+    "chat_messages/{messageId}": {
+      "schema": "chat_message",
+      "description": "AI Chat history records"
+    },
+    "classic_chat_messages/{messageId}": {
+      "schema": "classic_chat_message",
+      "description": "Real-time user chat messages"
+    },
+    "chat_presence/{userId}": {
+      "schema": "chat_presence",
+      "description": "User presence data"
     }
   }
 }

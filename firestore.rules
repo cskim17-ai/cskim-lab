@@ -10,13 +10,12 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isEmailVerified() {
-      return isSignedIn() && request.auth.token.email_verified == true;
+    function authUid() {
+      return isSignedIn() ? request.auth.uid : 'anonymous';
     }
 
     function isAdmin() {
-      // Allowing access for both authenticated and unauthenticated users 
-      // to fulfill the request of removing authentication barriers.
+      // Overridden as requested to reduce barriers
       return true;
     }
 
@@ -34,22 +33,20 @@ service cloud.firestore {
 
     // Config Desks
     match /config_desks/{deskId} {
-      allow read: if isAdmin();
-      allow create: if isAdmin() && isValidConfigDesk(incoming());
-      allow update: if isAdmin() && isValidConfigDesk(incoming());
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidConfigDesk(incoming());
       allow delete: if isAdmin();
 
       function isValidConfigDesk(data) {
-        return data.nfc_id is string && data.nfc_id.size() <= 100 &&
+        return data.nfc_id is string && data.nfc_id == deskId &&
                data.pc_name is string && data.pc_name.size() <= 100 &&
                data.status in ['active', 'inactive'] &&
-               data.updated_at is string; // ISO string
+               data.updated_at is string;
       }
     }
 
-    // Active Sessions (Single Session)
+    // Active Sessions
     match /active_session/{sessionId} {
-      // Publicly readable for kiosks/viewers
       allow get: if true;
       allow list: if isAdmin();
       allow create, update: if isAdmin() && isValidActiveSession(incoming());
@@ -64,22 +61,113 @@ service cloud.firestore {
     }
 
     // Settings
-    match /settings/accessConfig {
-      allow read: if true; // Allowed because app needs it to determine login flow
-      allow write: if isAdmin();
-    }
-
-    match /settings/logo {
+    match /settings/{settingId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Todos Collection
-    match /todos/{todoId} {
+    // Todos
+    match /todos/{dateId} {
       allow read, write: if true;
+      match /items/{itemId} {
+        allow read, write: if true;
+      }
+    }
 
-      function isValidTodo(data) {
-        return data.text is string && data.text.size() <= 1000;
+    // Gas Receipts
+    match /gas_receipts/{receiptId} {
+      allow read: if true;
+      allow create: if isValidId(receiptId) && isValidGasReceipt(incoming()) && (incoming().userId == authUid()) && (incoming().createdAt == request.time);
+      allow update: if isValidId(receiptId) && isValidGasReceipt(incoming()) && (existing().userId == authUid() || isAdmin()) && (incoming().updatedAt == request.time);
+      allow delete: if isAdmin() || (isValidId(receiptId) && (existing().userId == authUid()));
+
+      function isValidGasReceipt(data) {
+        return data.keys().hasAll(['id', 'date', 'stationName', 'amount', 'liters', 'fuelType', 'unitPrice', 'createdAt', 'userId']) &&
+               data.id == receiptId &&
+               data.date is string && data.date.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+               data.stationName is string && data.stationName.size() <= 200 &&
+               data.amount is number &&
+               data.liters is number &&
+               data.fuelType is string &&
+               data.unitPrice is number &&
+               data.userId is string;
+      }
+    }
+
+    // Palettes
+    match /palettes/{paletteId} {
+      allow read: if true;
+      allow create: if isValidId(paletteId) && isValidPalette(incoming()) && (incoming().userId == authUid()) && (incoming().createdAt == request.time);
+      allow update: if isValidId(paletteId) && isValidPalette(incoming()) && (existing().userId == authUid() || isAdmin()) && (incoming().updatedAt == request.time);
+      allow delete: if isAdmin() || (isValidId(paletteId) && (existing().userId == authUid()));
+
+      function isValidPalette(data) {
+        return data.keys().hasAll(['id', 'name', 'colors', 'createdAt', 'userId']) &&
+               data.id == paletteId &&
+               data.name is string && data.name.size() <= 100 &&
+               data.colors is list && data.colors.size() == 5 &&
+               data.userId is string;
+      }
+    }
+
+    // Map Markers
+    match /map_markers/{markerId} {
+      allow read: if true;
+      allow create: if isValidId(markerId) && isValidMarker(incoming()) && (incoming().userId == authUid()) && (incoming().createdAt == request.time);
+      allow update: if isValidId(markerId) && isValidMarker(incoming()) && (existing().userId == authUid() || isAdmin()) && (incoming().updatedAt == request.time);
+      allow delete: if isAdmin() || (isValidId(markerId) && (existing().userId == authUid()));
+
+      function isValidMarker(data) {
+        return data.keys().hasAll(['id', 'lat', 'lng', 'memo', 'userId', 'createdAt']) &&
+               data.id == markerId &&
+               data.lat is number &&
+               data.lng is number &&
+               data.memo is string && data.memo.size() <= 1000 &&
+               data.userId is string;
+      }
+    }
+
+    // Chat Messages
+    match /chat_messages/{messageId} {
+      allow read: if true;
+      allow list: if (resource.data.userId == authUid()) || isAdmin();
+      allow create: if isValidId(messageId) && isValidChatMessage(incoming()) && (incoming().userId == authUid()) && (incoming().createdAt == request.time);
+      allow delete: if isAdmin() || (isValidId(messageId) && (existing().userId == authUid()));
+
+      function isValidChatMessage(data) {
+        return data.keys().hasAll(['id', 'role', 'text', 'userId', 'createdAt']) &&
+               data.id == messageId &&
+               data.role in ['user', 'model'] &&
+               data.text is string && data.text.size() <= 10000 &&
+               data.userId is string;
+      }
+    }
+
+    // Classic Chat (Real-time Multi-user)
+    match /classic_chat_messages/{messageId} {
+      allow read: if true;
+      allow create: if isValidId(messageId) && isValidClassicChatMessage(incoming()) && (incoming().userId == authUid()) && (incoming().createdAt == request.time);
+      allow delete: if isAdmin();
+
+      function isValidClassicChatMessage(data) {
+        return data.keys().hasAll(['id', 'nickname', 'text', 'userId', 'createdAt']) &&
+               data.id == messageId &&
+               data.nickname is string && data.nickname.size() <= 50 &&
+               data.text is string && data.text.size() <= 2000 &&
+               data.userId is string;
+      }
+    }
+
+    // Presence
+    match /chat_presence/{userId} {
+      allow read: if true;
+      allow write: if (userId == authUid()) && isValidPresence(incoming());
+
+      function isValidPresence(data) {
+        return data.keys().hasAll(['userId', 'nickname', 'lastSeen']) &&
+               data.userId == userId &&
+               data.nickname is string && data.nickname.size() <= 50 &&
+               data.lastSeen == request.time;
       }
     }
     
