@@ -184,38 +184,38 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
       exit={{ opacity: 0, y: -20 }}
       className="space-y-8"
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl serif italic">NFC 태그 관리</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-2xl sm:text-3xl serif italic">NFC 태그 관리</h2>
         <button 
           onClick={exportToExcel}
-          className="bg-lime text-forest px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:shadow-[0_0_30px_rgba(163,230,53,0.3)] transition-all"
+          className="w-full sm:w-auto bg-lime text-forest px-6 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(163,230,53,0.3)] transition-all"
         >
           <Download size={18} /> 엑셀 내보내기
         </button>
       </div>
 
       {/* 필터 및 검색 */}
-      <div className="glass rounded-[40px] border border-white/10 p-8 space-y-6">
-        <div className="flex gap-4 items-end">
+      <div className="glass rounded-[32px] sm:rounded-[40px] border border-white/10 p-4 sm:p-8 space-y-6">
+        <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-end">
           <div className="flex-1">
-            <label className="text-xs tracking-widest uppercase opacity-40 block mb-3">검색</label>
+            <label className="text-[10px] sm:text-xs tracking-widest uppercase opacity-40 block mb-2 sm:mb-3">검색</label>
             <div className="relative">
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40" />
               <input
                 type="text"
-                placeholder="NFC ID, PC명, MAC 주소, 담당자 검색..."
+                placeholder="NFC ID, PC명 등..."
                 value={filterSearch}
                 onChange={(e) => setFilterSearch(e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3 text-sm focus:outline-none focus:border-lime/50 focus:bg-white/10 transition-all"
               />
             </div>
           </div>
-          <div>
-            <label className="text-xs tracking-widest uppercase opacity-40 block mb-3">상태</label>
+          <div className="w-full md:w-40">
+            <label className="text-[10px] sm:text-xs tracking-widest uppercase opacity-40 block mb-2 sm:mb-3">상태</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-forest border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-lime/50 transition-all cursor-pointer"
+              className="w-full bg-forest border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-lime/50 transition-all cursor-pointer"
             >
               <option className="bg-forest text-white">전체</option>
               <option className="bg-forest text-white">active</option>
@@ -227,7 +227,7 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
         {/* 추가 버튼 */}
         <button
           onClick={() => setIsAddingTag(!isAddingTag)}
-          className="bg-lime text-forest px-6 py-2 rounded-full font-bold text-sm hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all"
+          className="w-full sm:w-auto bg-lime text-forest px-6 py-2.5 rounded-full font-bold text-sm hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all"
         >
           {isAddingTag ? '취소' : '+ NFC 태그 추가'}
         </button>
@@ -238,83 +238,51 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="space-y-4 pt-4 border-t border-white/10"
+            className="space-y-6 pt-4 border-t border-white/10 overflow-hidden"
           >
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={getIPAddress}
-                className="bg-blue-500/30 text-blue-200 hover:bg-blue-500/50 border border-blue-500/50 px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap"
+                className="bg-blue-500/30 text-blue-200 hover:bg-blue-500/50 border border-blue-500/50 px-4 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap"
               >
                 IP 정보 가져오기
               </button>
-              <p className="text-xs opacity-60 flex items-center">현재 PC의 공인 IP 정보를 확인합니다</p>
+              <p className="text-[10px] sm:text-xs opacity-60 flex items-center">현재 PC의 공인 IP 정보를 확인합니다</p>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 type="text"
-                placeholder="NFC ID (필수 - 영문대문자)"
+                placeholder="NFC ID (필수)"
                 value={newTag.nfc_id}
-                inputMode="text"
-                lang="en"
-                spellCheck={false}
                 onChange={(e) => handleNfcIdChange(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
-              />
-              <input
-                type="text"
-                placeholder="인증된 PC MAC 주소"
-                value={newTag.authorized_mac}
-                onChange={(e) => setNewTag({ ...newTag, authorized_mac: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-lime/50"
               />
               <input
                 type="text"
                 placeholder="PC 관리명 (필수)"
                 value={newTag.pc_name}
-                lang="ko"
                 onChange={(e) => setNewTag({ ...newTag, pc_name: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-lime/50"
+              />
+              <input
+                type="text"
+                placeholder="MAC 주소"
+                value={newTag.authorized_mac}
+                onChange={(e) => setNewTag({ ...newTag, authorized_mac: e.target.value })}
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-lime/50"
               />
               <select
                 value={newTag.status}
                 onChange={(e) => setNewTag({ ...newTag, status: e.target.value as any })}
-                className="bg-forest border border-white/20 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-lime/50 cursor-pointer"
+                className="bg-forest border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-lime/50 cursor-pointer"
               >
-                <option value="active" className="bg-forest text-white">active</option>
-                <option value="inactive" className="bg-forest text-white">inactive</option>
+                <option value="active">active</option>
+                <option value="inactive">inactive</option>
               </select>
-              <input
-                type="text"
-                placeholder="마지막 접속"
-                value={newTag.last_login}
-                onChange={(e) => setNewTag({ ...newTag, last_login: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
-              />
-              <input
-                type="text"
-                placeholder="PO 번호"
-                value={newTag.po_number}
-                onChange={(e) => setNewTag({ ...newTag, po_number: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
-              />
-              <input
-                type="text"
-                placeholder="부서"
-                value={newTag.department}
-                onChange={(e) => setNewTag({ ...newTag, department: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
-              />
-              <input
-                type="text"
-                placeholder="담당자"
-                value={newTag.assigned_user}
-                onChange={(e) => setNewTag({ ...newTag, assigned_user: e.target.value })}
-                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-lime/50"
-              />
             </div>
             <button
               onClick={handleAddTag}
-              className="w-full bg-lime text-forest px-4 py-2 rounded-xl font-bold text-sm hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all"
+              className="w-full bg-lime text-forest px-4 py-3 rounded-xl font-bold text-sm hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all mt-4"
             >
               저장
             </button>
@@ -322,9 +290,65 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
         )}
       </div>
 
-      {/* 테이블 */}
-      <div className="glass rounded-[40px] border border-white/10 overflow-hidden flex flex-col max-h-[70vh]">
-        <div className="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+      {/* 테이블/카드 뷰 */}
+      <div className="glass rounded-[32px] sm:rounded-[40px] border border-white/10 overflow-hidden flex flex-col flex-1">
+        {/* Mobile Card List */}
+        <div className="sm:hidden overflow-y-auto max-h-[70vh] p-4 space-y-4 custom-scrollbar">
+          {filteredTags.map((tag) => (
+            <div 
+              key={tag.id}
+              onClick={() => setSelectedTag(tag)}
+              className="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-4 relative active:scale-[0.98] transition-all"
+            >
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <p className="text-[10px] tracking-widest uppercase opacity-40 font-bold">NFC ID</p>
+                  <h4 className="font-bold text-white text-base">{tag.nfc_id}</h4>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-[10px] font-bold ${
+                  tag.status === 'active' ? 'bg-lime text-forest' : 'bg-white/20 text-white'
+                }`}>
+                  {tag.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] tracking-widest uppercase opacity-40 font-bold">PC 관리명</p>
+                  <p className="text-sm font-medium text-white/80">{tag.pc_name || '-'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] tracking-widest uppercase opacity-40 font-bold">담당자</p>
+                  <p className="text-sm font-medium text-white/80">{tag.assigned_user || '-'}</p>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-white/5 flex justify-between items-center">
+                 <div className="flex items-center gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
+                   <p className="text-[10px] text-white/40 font-medium">마지막 접속: {tag.last_login || '없음'}</p>
+                 </div>
+                 <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteTag(tag);
+                    }}
+                    className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg"
+                 >
+                   <Trash2 size={16} />
+                 </button>
+              </div>
+            </div>
+          ))}
+          {filteredTags.length === 0 && (
+            <div className="py-20 text-center opacity-40 serif italic">
+              검색 결과가 없습니다.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto overflow-y-auto flex-1 custom-scrollbar max-h-[70vh]">
           <table className="w-full text-left border-collapse table-fixed">
             <thead>
               <tr className="border-b border-white/10 text-[10px] tracking-widest uppercase opacity-40 sticky top-0 bg-[#1a2e1a] z-10">
@@ -413,7 +437,7 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
               </div>
 
               <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="text-xs tracking-widest uppercase opacity-40 block mb-2">NFC ID (수정 불가)</label>
                     <input

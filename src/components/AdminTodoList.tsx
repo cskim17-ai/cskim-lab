@@ -9,7 +9,7 @@ import {
 import { 
   collection, query, orderBy, onSnapshot, 
   setDoc, deleteDoc, doc, updateDoc,
-  writeBatch, where
+  writeBatch, where, getDocs
 } from 'firebase/firestore';
 import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { cn } from '../lib/utils';
@@ -43,10 +43,12 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
 
   useEffect(() => {
     setIsLoading(true);
-    // 선택된 날짜에 해당하는 할일만 필터링하여 가져옵니다.
+    // 날짜를 YYYYMMDD 형식으로 변환하여 해당 문서의 items 서브 컬렉션을 구독합니다.
+    const dateId = selectedDate.replace(/-/g, '');
+    const itemsCollectionRef = collection(db, 'todos', dateId, 'items');
+    
     const q = query(
-      collection(db, 'todos'), 
-      where('date', '==', selectedDate),
+      itemsCollectionRef,
       orderBy('order', 'asc')
     );
     
@@ -59,7 +61,8 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
       setIsLoading(false);
     }, (error) => {
       console.error("Error fetching todos:", error);
-      handleFirestoreError(error, OperationType.LIST, 'todos');
+      // 서브컬렉션 경로로 에러 처리
+      handleFirestoreError(error, OperationType.LIST, `todos/${dateId}/items`);
       setIsLoading(false);
     });
 
@@ -72,8 +75,15 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
 
     setIsAdding(true);
     try {
-      const todoId = Math.random().toString(36).substring(2, 11);
       const userId = auth.currentUser?.uid || 'guest';
+      const dateId = newTodoDate.replace(/-/g, '');
+      
+      // 서브 컬렉션 참조
+      const itemsRef = collection(db, 'todos', dateId, 'items');
+      
+      // 새 문서 참조 생성 (ID 자동 생성)
+      const newTaskDoc = doc(itemsRef);
+      const todoId = newTaskDoc.id;
       
       const maxOrder = todos.length > 0 ? Math.max(...todos.map(t => t.order)) : 0;
 
@@ -87,15 +97,22 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
         order: maxOrder + 1
       };
 
-      await setDoc(doc(db, 'todos', todoId), newTodoItem);
+      // 부모 문서 존재 보장 (날짜별 문서)
+      await setDoc(doc(db, 'todos', dateId), { 
+        updatedAt: new Date().toISOString(),
+        date: newTodoDate
+      }, { merge: true });
+
+      // 서브 컬렉션에 할일 추가
+      await setDoc(newTaskDoc, newTodoItem);
+      
       setNewTodo('');
-      // 만약 다른 날짜에 추가했다면 해당 날짜로 이동할지 물어볼 수도 있지만, 
-      // 여기서는 목록이 갱신되도록 selectedDate를 newTodoDate로 맞춰줍니다.
       if (selectedDate !== newTodoDate) {
         setSelectedDate(newTodoDate);
       }
     } catch (error) {
-      handleFirestoreError(error, OperationType.CREATE, 'todos');
+      const dateId = newTodoDate.replace(/-/g, '');
+      handleFirestoreError(error, OperationType.CREATE, `todos/${dateId}/items`);
     } finally {
       setIsAdding(false);
     }
@@ -116,13 +133,14 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
     setSelectedDate(current.toISOString().split('T')[0]);
   };
 
-  const handleToggleTodo = async (id: string, currentStatus: boolean) => {
+  const handleToggleTodo = async (todo: Todo) => {
+    const dateId = todo.date.replace(/-/g, '');
     try {
-      await updateDoc(doc(db, 'todos', id), {
-        completed: !currentStatus
+      await updateDoc(doc(db, 'todos', dateId, 'items', todo.id), {
+        completed: !todo.completed
       });
     } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, `todos/${id}`);
+      handleFirestoreError(error, OperationType.UPDATE, `todos/${dateId}/items/${todo.id}`);
     }
   };
 
@@ -134,13 +152,18 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
   const handleSaveEdit = async () => {
     if (!editingId || !editText.trim()) return;
     
+    // 현재 편집 중인 할일의 정보를 찾습니다.
+    const todo = todos.find(t => t.id === editingId);
+    if (!todo) return;
+
+    const dateId = todo.date.replace(/-/g, '');
     try {
-      await updateDoc(doc(db, 'todos', editingId), {
+      await updateDoc(doc(db, 'todos', dateId, 'items', editingId), {
         text: editText.trim()
       });
       setEditingId(null);
     } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, `todos/${editingId}`);
+      handleFirestoreError(error, OperationType.UPDATE, `todos/${dateId}/items/${editingId}`);
     }
   };
 
@@ -149,12 +172,13 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
     setEditText('');
   };
 
-  const handleDeleteTodo = async (id: string) => {
+  const handleDeleteTodo = async (todo: Todo) => {
     const deleteAction = async () => {
+      const dateId = todo.date.replace(/-/g, '');
       try {
-        await deleteDoc(doc(db, 'todos', id));
+        await deleteDoc(doc(db, 'todos', dateId, 'items', todo.id));
       } catch (error) {
-        handleFirestoreError(error, OperationType.DELETE, `todos/${id}`);
+        handleFirestoreError(error, OperationType.DELETE, `todos/${dateId}/items/${todo.id}`);
       }
     };
 
@@ -168,11 +192,12 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
   const handleReorder = async (newOrder: Todo[]) => {
     setTodos(newOrder); // Optimistic update
     
+    const dateId = selectedDate.replace(/-/g, '');
     try {
       const batch = writeBatch(db);
       newOrder.forEach((todo, index) => {
         if (todo.order !== index) {
-          batch.update(doc(db, 'todos', todo.id), { order: index });
+          batch.update(doc(db, 'todos', dateId, 'items', todo.id), { order: index });
         }
       });
       await batch.commit();
@@ -186,24 +211,24 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-6 max-w-2xl mx-auto"
+      className="space-y-6 max-w-4xl mx-auto"
     >
-      <div className="flex items-center justify-between gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="bg-lime/20 p-2 rounded-lg">
             <ListTodo className="text-lime" size={24} />
           </div>
-          <h2 className="text-3xl serif italic">1.할일목록</h2>
+          <h2 className="text-2xl sm:text-3xl serif italic">1.할일목록</h2>
         </div>
         
-        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl p-1.5 grayscale-0">
+        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl p-1.5 w-full sm:w-auto justify-between sm:justify-start">
           <button 
             onClick={() => changeDay(-1)}
-            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all"
+            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all flex-shrink-0"
           >
             <ChevronLeft size={20} />
           </button>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-xl text-white font-bold cursor-pointer relative group">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-xl text-white font-bold cursor-pointer relative group flex-1 sm:flex-none justify-center">
             <CalendarIcon size={16} className="text-lime" />
             <span className="text-sm">{selectedDate}</span>
             <input 
@@ -215,54 +240,49 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
           </div>
           <button 
             onClick={() => changeDay(1)}
-            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all"
+            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all flex-shrink-0"
           >
             <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      <div className="glass p-4 sm:p-8 rounded-[32px] border border-white/10 space-y-8">
+      <div className="glass p-4 sm:p-8 rounded-[32px] border border-white/10 space-y-6 sm:y-8">
         <form onSubmit={handleAddTodo} className="space-y-3">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="새로운 할 일을 입력하세요... (F4: 추가)"
-              className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex-grow focus:border-lime outline-none transition-all text-white text-lg placeholder:text-white/20"
+              placeholder="새로운 할 일..."
+              className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 sm:py-4 flex-grow focus:border-lime outline-none transition-all text-white text-base sm:text-lg placeholder:text-white/20"
               disabled={isAdding}
             />
             <button
               type="submit"
               disabled={isAdding || !newTodo.trim()}
-              className="bg-lime text-forest px-6 py-4 rounded-2xl font-bold hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 disabled:opacity-50"
+              className="bg-lime text-forest px-6 py-3.5 sm:py-4 rounded-2xl font-bold hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isAdding ? <Loader2 size={24} className="animate-spin" /> : <Plus size={24} />}
-              <span className="hidden sm:inline font-bold">추가</span>
+              <span className="font-bold">추가</span>
             </button>
           </div>
           
-          <div className="flex flex-wrap items-center gap-4 px-1">
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-white/40 font-medium whitespace-nowrap">등록 예정일:</span>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 px-1">
+            <div className="flex items-center gap-2 sm:gap-3 text-sm">
+              <span className="text-white/40 font-medium whitespace-nowrap">예정일:</span>
               <div className="relative group">
                 <input 
                   type="date" 
                   value={newTodoDate}
                   onChange={(e) => setNewTodoDate(e.target.value)}
-                  className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-lime focus:bg-white/10 transition-all cursor-pointer hover:border-white/20 select-none"
+                  className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-lime focus:bg-white/10 transition-all cursor-pointer hover:border-white/20 select-none text-xs sm:text-sm"
                   style={{ colorScheme: 'dark' }}
                 />
                 {newTodoDate === getTodayStr() && (
-                  <span className="absolute -top-2 -right-2 bg-lime text-forest text-[10px] px-1.5 py-0.5 rounded-full font-black shadow-lg">
+                  <span className="absolute -top-2 -right-2 bg-lime text-forest text-[8px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-black shadow-lg">
                     TODAY
-                  </span>
-                )}
-                {newTodoDate > getTodayStr() && (
-                  <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black shadow-lg animate-pulse">
-                    FUTURE
                   </span>
                 )}
               </div>
@@ -272,7 +292,7 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
               <button 
                 type="button"
                 onClick={() => setNewTodoDate(getTodayStr())}
-                className="flex items-center gap-1.5 text-xs bg-white/5 px-3 py-2 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+                className="flex items-center gap-1.5 text-[10px] sm:text-xs bg-white/5 px-3 py-2 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition-all active:scale-95"
               >
                 <X size={14} />
                 오늘로 리셋
@@ -308,7 +328,7 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
                         ? "bg-white/5 border-transparent opacity-40 shadow-none" 
                         : "bg-white/5 border-white/5 hover:border-white/20 hover:shadow-xl"
                     )}
-                    onClick={() => !editingId && handleToggleTodo(todo.id, todo.completed)}
+                    onClick={() => !editingId && handleToggleTodo(todo)}
                   >
                     <div className="text-white/10 hover:text-white/30 p-1 cursor-grab active:cursor-grabbing flex-shrink-0">
                       <GripVertical size={20} />
@@ -376,7 +396,7 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
                       )}
                       
                       <button 
-                        onClick={() => handleDeleteTodo(todo.id)}
+                        onClick={() => handleDeleteTodo(todo)}
                         className="text-white/20 hover:text-red-400 p-2 rounded-xl hover:bg-red-400/10 transition-all sm:opacity-0 sm:group-hover:opacity-100"
                         title="삭제"
                       >

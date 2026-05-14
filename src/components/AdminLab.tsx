@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
+import { CheckCircle } from 'lucide-react';
 import { setDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { useState, useEffect } from 'react';
@@ -109,40 +110,42 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-8"
+      className="space-y-6 sm:space-y-8"
     >
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl serif italic">NFC전송</h2>
+        <h2 className="text-2xl sm:text-3xl serif italic">NFC전송</h2>
       </div>
 
-      <div className="glass p-8 rounded-[40px] border border-white/10 space-y-8">
+      <div className="glass p-4 sm:p-8 rounded-[32px] sm:rounded-[40px] border border-white/10 space-y-6 sm:space-y-8">
         {/* Row 1: Input and Buttons */}
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          <label className="text-lg font-bold whitespace-nowrap min-w-[120px]">상품코드 입력</label>
-          <input 
-            type="text"
-            value={labProductCode}
-            onChange={(e) => setLabProductCode(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow focus:border-lime outline-none transition-all"
-            placeholder="상품코드를 입력하세요"
-          />
-          <div className="flex gap-2 w-full md:w-auto flex-wrap md:flex-nowrap">
+        <div className="space-y-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
+            <label className="text-sm sm:text-lg font-bold whitespace-nowrap min-w-[120px]">상품코드 입력</label>
+            <input 
+              type="text"
+              value={labProductCode}
+              onChange={(e) => setLabProductCode(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow focus:border-lime outline-none transition-all text-sm sm:text-base"
+              placeholder="상품코드를 입력하세요"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 justify-end">
             <button 
               onClick={handleSearch}
-              className="bg-lime text-forest px-6 py-3 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all flex-1 md:flex-none"
+              className="bg-lime text-forest px-6 py-3 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] transition-all flex-1 sm:flex-none text-sm"
             >
               조회
             </button>
             <button 
               onClick={handleQrTransfer}
-              className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/20 transition-all flex-1 md:flex-none"
+              className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/20 transition-all flex-1 sm:flex-none text-sm"
             >
               URL QR전송
             </button>
             <button 
               onClick={handleNfcTransfer}
-              className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/20 transition-all flex-1 md:flex-none"
+              className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/20 transition-all flex-1 sm:flex-none text-sm"
             >
               NFC
             </button>
@@ -150,47 +153,52 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
         </div>
 
         {/* NFC ID 선택 드롭다운 */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <label className="text-lg font-bold whitespace-nowrap min-w-[120px]">NFC ID 선택</label>
-          <select
-            value={selectedNfcId}
-            onChange={(e) => setSelectedNfcId(e.target.value)}
-            className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow focus:border-lime outline-none transition-all text-white appearance-none"
-          >
-            <option value="" className="bg-forest text-white">-- NFC ID를 선택하세요 --</option>
-            {activeNfcIds.map((nfcId) => (
-              <option key={nfcId} value={nfcId} className="bg-forest text-white">
-                {nfcId}
-              </option>
-            ))}
-          </select>
-          <span className="text-xs opacity-60 whitespace-nowrap">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
+          <label className="text-sm sm:text-lg font-bold whitespace-nowrap min-w-[120px]">NFC ID 선택</label>
+          <div className="relative w-full flex-grow">
+            <select
+              value={selectedNfcId}
+              onChange={(e) => setSelectedNfcId(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-lime outline-none transition-all text-white appearance-none text-sm sm:text-base"
+            >
+              <option value="" className="bg-forest text-white">-- NFC ID를 선택하세요 --</option>
+              {activeNfcIds.map((nfcId) => (
+                <option key={nfcId} value={nfcId} className="bg-forest text-white">
+                  {nfcId}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+          <span className="text-[10px] sm:text-xs opacity-60 whitespace-nowrap">
             {activeNfcIds.length > 0 ? `(${activeNfcIds.length}개 활성)` : '활성 NFC ID 없음'}
           </span>
         </div>
 
         {/* Row 2: Output URL */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <label className="text-lg font-bold whitespace-nowrap min-w-[120px]">출력 URL</label>
-          <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow w-full min-h-[50px] break-all text-white/60 text-sm">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
+          <label className="text-sm sm:text-lg font-bold whitespace-nowrap min-w-[120px]">출력 URL</label>
+          <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow w-full min-h-[50px] break-all text-white/50 text-[10px] sm:text-xs">
             {labOutputUrl || '조회 후 URL이 표시됩니다'}
           </div>
         </div>
 
         {/* NFC 태깅 URL */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <label className="text-lg font-bold whitespace-nowrap min-w-[120px]">NFC 태깅 URL</label>
-          <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow w-full min-h-[50px] break-all text-white/60 text-sm">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
+          <label className="text-sm sm:text-lg font-bold whitespace-nowrap min-w-[120px]">NFC 태깅 URL</label>
+          <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex-grow w-full min-h-[50px] break-all text-white/50 text-[10px] sm:text-xs">
             {nfcTaggingUrl || 'NFC ID를 선택하면 URL이 표시됩니다'}
           </div>
         </div>
 
         {/* Row 3: Results */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
           {/* URL Result */}
-          <div className="space-y-4">
-            <h3 className="text-center text-lg font-bold">URL 설정결과</h3>
-            <div className="border border-white/20 rounded-xl overflow-hidden bg-white aspect-[3/4] relative">
+          <div className="space-y-3">
+            <h3 className="text-center text-sm sm:text-base font-bold opacity-60">URL 설정결과</h3>
+            <div className="border border-white/10 rounded-2xl overflow-hidden bg-white aspect-square sm:aspect-[3/4] relative shadow-inner">
               {labOutputUrl ? (
                 <iframe 
                   src={labOutputUrl} 
@@ -199,52 +207,48 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-black/40">
-                  결과가 여기에 표시됩니다
+                <div className="absolute inset-0 flex items-center justify-center text-black/20 text-sm">
+                  조회 결과 표시
                 </div>
               )}
             </div>
           </div>
 
           {/* QR Result */}
-          <div className="space-y-4">
-            <h3 className="text-center text-lg font-bold">QR전송 설정결과</h3>
-            <div className="border border-white/20 rounded-xl overflow-hidden bg-white aspect-[3/4] relative p-4 flex flex-col items-center justify-center">
+          <div className="space-y-3">
+            <h3 className="text-center text-sm sm:text-base font-bold opacity-60">QR전송 설정결과</h3>
+            <div className="border border-white/10 rounded-2xl overflow-hidden bg-white aspect-square sm:aspect-[3/4] relative p-4 flex flex-col items-center justify-center shadow-inner text-center">
               {labQrResult ? (
-                <div className="text-center">
-                  <div className="w-48 h-48 bg-black/5 rounded-xl mb-4 flex items-center justify-center mx-auto">
+                <div>
+                  <div className="w-32 h-32 sm:w-48 sm:h-48 bg-black/5 rounded-xl mb-4 flex items-center justify-center mx-auto">
                     {labOutputUrl && (
-                      <QRCodeSVG value={labOutputUrl} size={160} level="H" />
+                      <QRCodeSVG value={labOutputUrl} size={150} level="H" />
                     )}
                   </div>
-                  <p className="text-black font-medium">{labQrResult}</p>
+                  <p className="text-black font-bold text-xs sm:text-sm">{labQrResult}</p>
                 </div>
               ) : (
-                <div className="text-black/40">
-                  결과가 여기에 표시됩니다
+                <div className="text-black/20 text-sm">
+                  결과 표시
                 </div>
               )}
             </div>
           </div>
 
           {/* NFC Result */}
-          <div className="space-y-4">
-            <h3 className="text-center text-lg font-bold">NFC전송 설정결과</h3>
-            <div className="border border-white/20 rounded-xl overflow-hidden bg-white aspect-[3/4] relative p-4 flex flex-col items-center justify-center">
+          <div className="space-y-3">
+            <h3 className="text-center text-sm sm:text-base font-bold opacity-60">NFC전송 설정결과</h3>
+            <div className="border border-white/10 rounded-2xl overflow-hidden bg-white aspect-square sm:aspect-[3/4] relative p-4 flex flex-col items-center justify-center shadow-inner text-center">
               {labTransferResult ? (
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-lime/20 text-forest rounded-full mb-4 flex items-center justify-center mx-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                      <line x1="3" y1="6" x2="21" y2="6"></line>
-                      <path d="M16 10a4 4 0 0 1-8 0"></path>
-                    </svg>
+                <div>
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 bg-lime/20 text-forest rounded-full mb-4 flex items-center justify-center mx-auto">
+                    <CheckCircle size={40} />
                   </div>
-                  <p className="text-black font-medium">{labTransferResult}</p>
+                  <p className="text-black font-bold text-xs sm:text-sm">{labTransferResult}</p>
                 </div>
               ) : (
-                <div className="text-black/40">
-                  결과가 여기에 표시됩니다
+                <div className="text-black/20 text-sm">
+                  결과 표시
                 </div>
               )}
             </div>
