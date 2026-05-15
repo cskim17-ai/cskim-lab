@@ -83,13 +83,13 @@ export default function AdminMarkdownBlog() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-7xl mx-auto space-y-6 py-4 sm:py-10 px-4 h-[calc(100vh-180px)] flex flex-col"
+      className="max-w-7xl mx-auto space-y-8 py-10 px-4 h-[calc(100vh-140px)] flex flex-col"
     >
       {/* Header & Main Toolbar */}
-      <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between shrink-0">
-        <div className="space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-black italic serif text-white">마크다운 에디터</h2>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Blog Content Creator</p>
+      <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter leading-tight">마크다운 에디터</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">콘텐츠 관리 프로토콜 v2.0</p>
         </div>
 
         <div className="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0">
@@ -124,7 +124,7 @@ export default function AdminMarkdownBlog() {
             className="flex items-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl text-[10px] font-black text-white/60 hover:text-lime transition-all active:scale-95 shrink-0 uppercase tracking-widest"
           >
             <Download size={14} />
-            Download.md
+            내보내기.md
           </button>
 
           <button
@@ -135,7 +135,7 @@ export default function AdminMarkdownBlog() {
             )}
           >
             {isSaved ? <CheckCircle2 size={14} /> : <Save size={14} />}
-            {isSaved ? "Saved" : "Save Now"}
+            {isSaved ? "저장 완료" : "지금 저장"}
           </button>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function AdminMarkdownBlog() {
         <div className="flex flex-col h-full space-y-3">
           <div className="flex items-center gap-2 px-2">
             <FileEdit size={12} className="text-lime" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Code Editor</span>
+            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">코드 에디터</span>
           </div>
           <div className="flex-1 relative group">
             <textarea
@@ -166,7 +166,7 @@ export default function AdminMarkdownBlog() {
         <div className="flex flex-col h-full space-y-3">
           <div className="flex items-center gap-2 px-2">
             <Eye size={12} className="text-lime" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Live Preview</span>
+            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">실시간 미리보기</span>
           </div>
           <div className="flex-1 bg-white/[0.02] border border-white/10 rounded-[32px] p-8 overflow-y-auto custom-scrollbar shadow-2xl relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-lime/5 blur-[80px] -translate-y-1/2 translate-x-1/2" />
@@ -186,7 +186,7 @@ export default function AdminMarkdownBlog() {
           <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.3em] italic">Vibe Content Engine v2.0</p>
         </div>
         <div className="text-[9px] font-black text-white/10 uppercase tracking-widest tabular-nums italic">
-          Chars: {markdown.length} | Lines: {markdown.split('\n').length}
+          글자수: {markdown.length} | 줄수: {markdown.split('\n').length}
         </div>
       </div>
     </motion.div>

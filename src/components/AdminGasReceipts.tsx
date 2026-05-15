@@ -170,6 +170,13 @@ export default function AdminGasReceipts({
     });
   }, [receipts]);
 
+  const fuelTypeMap: Record<string, string> = {
+    'Gasoline': '휘발유',
+    'Diesel': '경유',
+    'LPG': 'LPG',
+    'Premium': '고급휘발유'
+  };
+
   const currentSelectionKey = `${summaryPeriod.year}-${summaryPeriod.month}`;
   const currentIndex = allAvailablePeriods.indexOf(currentSelectionKey);
 
@@ -295,20 +302,23 @@ export default function AdminGasReceipts({
   // Helper for year/month selection part removed replaced by useMemo above
 
   return (
-    <div className="min-h-screen bg-transparent text-white font-sans pb-24">
+    <div className="min-h-screen bg-transparent text-white font-sans pb-24 px-4 sm:px-6 md:px-0">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-6 max-w-2xl mx-auto">
-        <div className="flex items-center gap-3">
-          <div className="bg-lime p-2 rounded-xl text-forest shadow-[0_0_20px_rgba(163,230,53,0.3)]">
-            <Fuel size={24} />
+      <div className="flex items-center justify-between py-10 max-w-2xl mx-auto border-b border-white/5 mb-10">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <div className="bg-lime p-3 rounded-2xl text-forest shadow-[0_0_30px_rgba(163,230,53,0.4)]">
+              <Fuel size={28} />
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-black italic serif tracking-tighter">주유 영수증</h1>
           </div>
-          <h1 className="text-xl font-bold tracking-tight">주유 영수증 AI</h1>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black">AI 주유 기록 프로토콜 v2.5</p>
         </div>
         <button 
           onClick={() => window.location.reload()}
-          className="p-2 bg-white/5 border border-white/10 rounded-full shadow-sm hover:bg-white/10 transition-all text-white/40"
+          className="p-4 bg-white/5 border border-white/10 rounded-3xl shadow-sm hover:bg-white/10 transition-all text-white/60 active:scale-90"
         >
-          <RotateCcw size={20} />
+          <RotateCcw size={24} />
         </button>
       </div>
 
@@ -448,7 +458,7 @@ export default function AdminGasReceipts({
                          </div>
                          <div className="flex items-end justify-between">
                             <div className="flex flex-wrap gap-2">
-                               <span className="bg-white/10 text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tight border border-white/10">{r.fuelType}</span>
+                               <span className="bg-white/10 text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tight border border-white/10">{fuelTypeMap[r.fuelType] || r.fuelType}</span>
                                {r.liters > 0 && (
                                  <span className="bg-white/10 text-white/90 px-3 py-1.5 rounded-xl text-[10px] font-black border border-white/10">{r.liters}L</span>
                                )}
@@ -616,7 +626,7 @@ export default function AdminGasReceipts({
                      </div>
                      <div className="flex items-end justify-between">
                         <div className="flex flex-wrap gap-2 mb-1">
-                           <span className="bg-lime/10 text-lime px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-tight shadow-sm">{r.fuelType}</span>
+                           <span className="bg-lime/10 text-lime px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-tight shadow-sm">{fuelTypeMap[r.fuelType] || r.fuelType}</span>
                            {r.liters > 0 && (
                              <span className="bg-white/10 text-white/90 px-2.5 py-1 rounded-lg text-[10px] font-black border border-white/10">{r.liters}L</span>
                            )}

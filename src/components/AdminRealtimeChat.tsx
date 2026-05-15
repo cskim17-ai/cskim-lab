@@ -262,25 +262,25 @@ export default function AdminRealtimeChat() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-5xl mx-auto h-[700px] flex gap-6"
+      className="max-w-5xl mx-auto h-[calc(100vh-140px)] sm:h-[700px] flex gap-6 px-4 sm:px-6 md:px-0"
     >
       {/* Side Bar */}
       <div className="w-64 hidden lg:flex flex-col gap-6">
         {/* Status Card */}
         <div className="glass rounded-[32px] border border-white/10 p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Connection</span>
+            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">연결 상태</span>
             <div className="flex items-center gap-1.5">
               <div className={cn("w-2 h-2 rounded-full", status === 'connected' ? "bg-lime animate-pulse" : "bg-red-500")} />
               <span className={cn("text-[9px] font-bold uppercase", status === 'connected' ? "text-lime" : "text-red-500")}>
-                {status === 'connected' ? 'Connected' : 'Offline'}
+                {status === 'connected' ? '연결됨' : '오프라인'}
               </span>
             </div>
           </div>
           
           <div className="pt-4 border-t border-white/5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Notifications</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">알림 설정</span>
               <button 
                 onClick={requestNotificationPermission}
                 className={cn("p-2 rounded-xl transition-all", notificationsEnabled ? "bg-lime/10 text-lime" : "bg-white/5 text-white/20")}
@@ -289,7 +289,7 @@ export default function AdminRealtimeChat() {
               </button>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Sound</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">효과음</span>
               <button 
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 className={cn("p-2 rounded-xl transition-all", soundEnabled ? "bg-lime/10 text-lime" : "bg-white/5 text-white/20")}
@@ -305,7 +305,7 @@ export default function AdminRealtimeChat() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Users size={14} className="text-lime" />
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Online Users</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">온라인 사용자</span>
             </div>
             <span className="px-2 py-0.5 bg-lime/10 text-lime text-[10px] font-black rounded-lg">{onlineUsers.length}</span>
           </div>
@@ -318,7 +318,7 @@ export default function AdminRealtimeChat() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[11px] font-bold text-white/60 truncate max-w-[120px]">{u.nickname}</span>
-                  <span className="text-[8px] text-lime/40 uppercase tracking-tighter">Active now</span>
+                  <span className="text-[8px] text-lime/40 uppercase tracking-tighter">활성 중</span>
                 </div>
               </div>
             ))}
@@ -341,20 +341,30 @@ export default function AdminRealtimeChat() {
       {/* Main Chat Area */}
       <div className="flex-1 glass rounded-[40px] border border-white/10 flex flex-col min-w-0 overflow-hidden bg-forest/50">
         {/* Chat Header */}
-        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+        <div className="p-4 sm:p-6 border-b border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-lime rounded-2xl flex items-center justify-center text-forest">
+            <div className="w-10 h-10 bg-lime rounded-2xl flex items-center justify-center text-forest shadow-xl">
               <MessageSquare size={20} />
             </div>
             <div>
-              <h3 className="text-sm font-black text-white">Vibe Collective Channel</h3>
-              <p className="text-[10px] text-white/20 font-bold uppercase tracking-widest">Public Chat Server</p>
+              <h3 className="text-sm sm:text-base font-black text-white">Vibe Collective</h3>
+              <p className="text-[10px] text-white/20 font-bold uppercase tracking-widest">Public Server v1</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 lg:hidden">
-             <span className="px-2 py-0.5 bg-lime/10 text-lime text-[10px] font-black rounded-lg flex items-center gap-1">
-               <Users size={10} /> {onlineUsers.length}
+          <div className="flex items-center gap-3">
+             <span className="px-2.5 py-1 bg-lime/10 text-lime text-[10px] font-black rounded-lg flex items-center gap-1.5 border border-lime/10">
+               <div className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
+               {onlineUsers.length}
              </span>
+             <button 
+               onClick={() => {
+                 localStorage.removeItem('vibe_chat_nickname');
+                 setIsJoined(false);
+               }}
+               className="lg:hidden p-2 text-white/20 hover:text-red-400"
+             >
+               <LogOut size={18} />
+             </button>
           </div>
         </div>
 
@@ -398,7 +408,7 @@ export default function AdminRealtimeChat() {
                     <span className="text-[8px] text-white/10 tabular-nums">
                       {m.createdAt?.toMillis ? new Date(m.createdAt.toMillis()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                     </span>
-                    {isMe && <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">You</span>}
+                    {isMe && <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">나</span>}
                   </div>
                   <div className={cn(
                     "px-4 py-3 rounded-2xl text-xs font-medium leading-relaxed shadow-lg break-words w-full",
@@ -435,9 +445,9 @@ export default function AdminRealtimeChat() {
           <div className="flex items-center justify-between mt-4">
              <div className="flex items-center gap-2 text-[8px] font-black text-white/10 uppercase tracking-widest">
                <CheckCircle2 size={10} className="text-lime" />
-               E2E Encryption Active
+               종단간 암호화 활성화
              </div>
-             <p className="text-[9px] text-white/20 italic">Vibe Coding Network Protocol v1.0</p>
+             <p className="text-[9px] text-white/20 italic">Vibe 코딩 네트워크 프로토콜 v1.0</p>
           </div>
         </div>
       </div>

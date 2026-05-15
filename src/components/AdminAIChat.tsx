@@ -150,17 +150,17 @@ export default function AdminAIChat() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-5xl mx-auto h-[500px] sm:h-[600px] md:h-[750px] flex flex-col glass rounded-[40px] border border-white/10 overflow-hidden shadow-2xl"
+      className="max-w-5xl mx-auto h-[calc(100vh-140px)] sm:h-[600px] md:h-[750px] flex flex-col glass rounded-[40px] border border-white/10 overflow-hidden shadow-2xl"
     >
       {/* Header */}
-      <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5 backdrop-blur-md">
+      <div className="p-5 sm:p-6 border-b border-white/10 flex items-center justify-between bg-white/5 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-lime/20 flex items-center justify-center text-lime shadow-[0_0_15px_rgba(163,230,53,0.2)]">
-            <Bot size={24} />
+            <Bot size={22} />
           </div>
           <div>
-            <h2 className="text-xl font-black italic serif">AI 챗봇</h2>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Vibe Intelligent Assistant</p>
+            <h2 className="text-lg sm:text-xl font-black italic serif">AI 챗봇</h2>
+            <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">지능형 텍스트 분석 v3.0</p>
           </div>
         </div>
         <button
@@ -267,7 +267,7 @@ export default function AdminAIChat() {
             {isLoading ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
           </button>
         </form>
-        <p className="text-center text-[9px] text-white/20 mt-4 font-bold uppercase tracking-[0.2em]">Powered by Gemini AI Engine</p>
+        <p className="text-center text-[9px] text-white/20 mt-4 font-bold uppercase tracking-[0.2em]">Gemini AI 엔진 기반</p>
       </div>
     </motion.div>
   );

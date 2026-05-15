@@ -173,42 +173,42 @@ export default function AdminWorldWeather() {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="max-w-4xl mx-auto space-y-6 sm:space-y-8 py-4 sm:py-10"
+      className="max-w-4xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-black italic serif text-white">실시간 세계 날씨</h2>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">World Weather Observer</p>
+      <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter leading-tight">세계 실시간 날씨</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">Global Meteo Observer v2.0</p>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center bg-white/5 rounded-2xl p-1 border border-white/10 shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex items-center bg-white/5 rounded-2xl p-1.5 border border-white/10 w-full sm:w-auto">
             <button
               onClick={() => setUnit('C')}
               className={cn(
-                "px-4 py-2 rounded-xl text-xs font-black transition-all",
-                unit === 'C' ? "bg-lime text-forest shadow-lg" : "text-white/40 hover:text-white"
+                "flex-1 sm:flex-none px-6 py-3 rounded-xl text-[11px] font-black transition-all",
+                unit === 'C' ? "bg-lime text-forest shadow-xl" : "text-white/40 hover:text-white"
               )}
             >
-              °C
+              섭씨
             </button>
             <button
               onClick={() => setUnit('F')}
               className={cn(
-                "px-4 py-2 rounded-xl text-xs font-black transition-all",
-                unit === 'F' ? "bg-lime text-forest shadow-lg" : "text-white/40 hover:text-white"
+                "flex-1 sm:flex-none px-6 py-3 rounded-xl text-[11px] font-black transition-all",
+                unit === 'F' ? "bg-lime text-forest shadow-xl" : "text-white/40 hover:text-white"
               )}
             >
-              °F
+              화씨
             </button>
           </div>
           <button
             onClick={getMyLocation}
-            className="flex items-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl text-xs font-black text-white/60 hover:text-lime transition-all active:scale-95 shrink-0"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[11px] font-black text-white/60 hover:text-lime transition-all active:scale-95"
           >
-            <Navigation size={14} />
-            <span className="hidden sm:inline">내 위치 사용</span>
+            <Navigation size={16} />
+            현재 위치
           </button>
         </div>
       </div>
@@ -307,7 +307,7 @@ export default function AdminWorldWeather() {
               <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
                 <Droplets size={20} />
               </div>
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Humidity</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">습도</span>
             </div>
             <div className="mt-4">
               <div className="text-3xl font-black text-white tabular-nums">{weather?.humidity || 0}%</div>
@@ -320,7 +320,7 @@ export default function AdminWorldWeather() {
               <div className="p-2.5 bg-orange-500/10 rounded-xl text-orange-400 group-hover:scale-110 transition-transform">
                 <Wind size={20} />
               </div>
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Wind Speed</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">풍속</span>
             </div>
             <div className="mt-4">
               <div className="text-3xl font-black text-white tabular-nums">{weather?.windSpeed || 0} m/s</div>
@@ -333,11 +333,11 @@ export default function AdminWorldWeather() {
               <div className="p-2.5 bg-yellow-500/10 rounded-xl text-yellow-400 group-hover:scale-110 transition-transform">
                 <Thermometer size={20} />
               </div>
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Feels Like</span>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">체감 온도</span>
             </div>
             <div className="mt-4">
               <div className="text-3xl font-black text-white tabular-nums">{Math.round(convertTemp(weather?.apparentTemp || 0))}°</div>
-              <p className="text-[10px] text-white/40 font-bold mt-1 uppercase tracking-tighter italic">체감 온도</p>
+              <p className="text-[10px] text-white/40 font-bold mt-1 uppercase tracking-tighter italic">현지 체감 지수</p>
             </div>
           </div>
 
@@ -345,7 +345,7 @@ export default function AdminWorldWeather() {
             <div className="p-4 bg-lime/10 rounded-full text-lime group-hover:rotate-180 transition-transform duration-700">
               <RefreshCw size={24} />
             </div>
-            <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Manual Refresh</p>
+            <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">수동 새로고침</p>
           </div>
         </div>
       </div>

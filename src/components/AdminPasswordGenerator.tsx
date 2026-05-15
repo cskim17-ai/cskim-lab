@@ -90,14 +90,16 @@ export default function AdminPasswordGenerator() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-3xl mx-auto space-y-8 py-4 sm:py-10"
+      className="max-w-3xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex items-center gap-3 text-lime">
-          <Lock className="animate-pulse" />
-          <h2 className="text-2xl font-black italic serif underline decoration-lime/50 underline-offset-8">안전한 비밀번호 생성</h2>
+      <div className="flex flex-col items-center space-y-6 text-center">
+        <div className="flex items-center gap-4 text-lime">
+          <div className="w-12 h-12 rounded-2xl bg-lime/10 flex items-center justify-center shadow-xl">
+            <Lock size={28} className="animate-pulse" />
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-black italic serif underline decoration-lime/50 underline-offset-12">보안 코드 생성</h2>
         </div>
-        <p className="text-xs text-white/40 uppercase tracking-widest font-bold">Secure Password Architect</p>
+        <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">Secure Password Protocol v4.0</p>
       </div>
 
       <div className="glass rounded-[40px] border border-white/10 p-8 space-y-8 relative overflow-hidden">
@@ -141,7 +143,7 @@ export default function AdminPasswordGenerator() {
         <div className="space-y-6">
           <div className="space-y-4">
             <div className="flex justify-between items-center px-1">
-              <span className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Password Length</span>
+              <span className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">비밀번호 길이</span>
               <span className="text-lime font-black text-lg">{length}</span>
             </div>
             <input
@@ -156,10 +158,10 @@ export default function AdminPasswordGenerator() {
 
           <div className="grid grid-cols-2 gap-3">
             {[
-              { id: 'uppercase', label: 'ABCD' },
-              { id: 'lowercase', label: 'abcd' },
-              { id: 'numbers', label: '1234' },
-              { id: 'symbols', label: '#%&*' },
+              { id: 'uppercase', label: '대문자 (ABCD)', sub: 'ABCD' },
+              { id: 'lowercase', label: '소문자 (abcd)', sub: 'abcd' },
+              { id: 'numbers', label: '숫자 (1234)', sub: '1234' },
+              { id: 'symbols', label: '특수문자 (!@#)', sub: '!@#$' },
             ].map((option) => (
               <label
                 key={option.id}
@@ -172,13 +174,13 @@ export default function AdminPasswordGenerator() {
               >
                 <div className="flex flex-col">
                   <span className="text-[10px] font-black text-white/40 uppercase tracking-tighter group-hover:text-white/60 transition-colors">
-                    {option.id}
+                    {option.label}
                   </span>
                   <span className={cn(
                     "font-mono text-sm",
                     options[option.id as keyof typeof options] ? "text-lime" : "text-white/20"
                   )}>
-                    {option.label}
+                    {option.sub}
                   </span>
                 </div>
                 <input

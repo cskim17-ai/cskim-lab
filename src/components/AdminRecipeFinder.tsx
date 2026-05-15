@@ -112,25 +112,25 @@ export default function AdminRecipeFinder() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-7xl mx-auto space-y-8 py-4 sm:py-10 px-4"
+      className="max-w-7xl mx-auto space-y-12 py-10 sm:py-16 px-4 sm:px-6 md:px-0 min-h-screen"
     >
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-black italic serif text-white">레시피 찾기</h2>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Smart Kitchen Assistant</p>
+      <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between border-b border-white/5 pb-10">
+        <div className="space-y-4">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">레시피 찾기</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">스마트 주방 어시스턴트 v2.0</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 flex-1 max-w-2xl">
+        <div className="flex flex-col sm:flex-row gap-4 flex-1 max-w-2xl w-full">
           <div className="relative flex-1 group">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="재료나 요리 이름을 입력하세요..."
-              className="w-full bg-forest/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm text-white focus:outline-none focus:border-lime/50 transition-all placeholder:text-white/20 shadow-inner group-focus-within:border-lime/30"
+              placeholder="재료나 요리 이름을 입력..."
+              className="w-full bg-forest/50 border border-white/10 rounded-[28px] py-6 pl-14 pr-6 text-lg font-bold text-white focus:outline-none focus:border-lime transition-all placeholder:text-white/10 shadow-2xl"
             />
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-lime transition-colors" size={18} />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-lime transition-colors" size={24} />
           </div>
 
           <div className="relative shrink-0">
@@ -221,7 +221,7 @@ export default function AdminRecipeFinder() {
                     {recipe.readyInMinutes && (
                       <span className="px-2.5 py-1 bg-black/40 backdrop-blur-md rounded-lg text-[10px] font-black text-white/80 flex items-center gap-1.5 border border-white/5">
                         <Clock size={10} className="text-lime" />
-                        {recipe.readyInMinutes}min
+                        {recipe.readyInMinutes}분
                       </span>
                     )}
                   </div>
@@ -242,7 +242,7 @@ export default function AdminRecipeFinder() {
 
                   {isSaved(recipe.id) && (
                     <div className="flex items-center gap-2 text-lime/60 text-[9px] font-black uppercase tracking-widest pt-2 border-t border-white/5">
-                      <Check size={10} /> Saved to Favorites
+                      <Check size={10} /> 즐겨찾기에 저장됨
                     </div>
                   )}
                 </div>
@@ -271,7 +271,7 @@ export default function AdminRecipeFinder() {
               <BookOpen size={80} className="text-white/5 relative z-10" />
             </div>
             <div className="space-y-2 relative z-10">
-              <p className="text-sm font-black text-white/20 uppercase tracking-[0.4em]">Ready to cook something new?</p>
+              <p className="text-sm font-black text-white/20 uppercase tracking-[0.4em]">새로운 요리를 시작할 준비가 되셨나요?</p>
               <p className="text-xs text-white/10 font-bold italic">당신만의 특별한 레시피를 검색해보세요</p>
             </div>
           </motion.div>

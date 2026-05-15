@@ -110,13 +110,15 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-6 sm:space-y-8"
+      className="max-w-4xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl sm:text-3xl serif italic">NFC전송</h2>
+      <div className="flex flex-col items-center space-y-4 text-center">
+        <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">NFC 실험실</h2>
+        <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black">전송 프로토콜 v3.0</p>
       </div>
 
-      <div className="glass p-4 sm:p-8 rounded-[32px] sm:rounded-[40px] border border-white/10 space-y-6 sm:space-y-8">
+      <div className="glass p-6 sm:p-10 rounded-[40px] border border-white/10 space-y-10 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-lime/5 blur-[100px] -translate-y-1/2 translate-x-1/2" />
         {/* Row 1: Input and Buttons */}
         <div className="space-y-4">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
@@ -203,7 +205,7 @@ export default function AdminLab({ showAlert }: AdminLabProps) {
                 <iframe 
                   src={labOutputUrl} 
                   className="w-full h-full border-0"
-                  title="URL Result"
+                  title="URL 결과"
                   referrerPolicy="no-referrer"
                 />
               ) : (

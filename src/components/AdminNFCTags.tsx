@@ -182,15 +182,18 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-8"
+      className="max-w-7xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl sm:text-3xl serif italic">NFC 태그 관리</h2>
+      <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">NFC 자산 관리</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black">태그 관리 시스템 v4.0</p>
+        </div>
         <button 
           onClick={exportToExcel}
-          className="w-full sm:w-auto bg-lime text-forest px-6 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(163,230,53,0.3)] transition-all"
+          className="w-full lg:w-auto bg-lime text-forest px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(163,230,53,0.3)] transition-all shadow-xl text-sm"
         >
-          <Download size={18} /> 엑셀 내보내기
+          <Download size={20} /> 엑셀 내보내기
         </button>
       </div>
 
@@ -432,7 +435,7 @@ export default function AdminNFCTags({ showAlert, showConfirm }: AdminNFCTagsPro
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl serif italic">NFC 태그 수정</h2>
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-[10px] tracking-widest uppercase opacity-40">
-                  <Edit2 size={12} /> Editing Mode
+                  <Edit2 size={12} /> 수정 모드
                 </div>
               </div>
 

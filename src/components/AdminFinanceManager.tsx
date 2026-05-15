@@ -116,16 +116,23 @@ export default function AdminFinanceManager() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl mx-auto space-y-8 py-4 sm:py-10"
+      className="max-w-6xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
       {/* Header & Balance Cards */}
+      <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">자산 관리자</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">개인 자산 프로토콜 v1.0</p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="glass rounded-[40px] border border-white/10 p-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-lime/10 blur-[60px] -translate-y-1/2 translate-x-1/2 transition-transform group-hover:scale-150" />
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-3 text-white/40">
               <Wallet size={18} className="text-lime" />
-              <span className="text-xs font-black uppercase tracking-widest">Total Balance</span>
+              <span className="text-xs font-black uppercase tracking-widest">총 잔액</span>
             </div>
             <div className={cn(
               "text-4xl font-black italic serif tabular-nums tracking-tighter",
@@ -140,7 +147,7 @@ export default function AdminFinanceManager() {
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-3 text-white/40">
               <TrendingUp size={18} className="text-green-400" />
-              <span className="text-xs font-black uppercase tracking-widest">Total Income</span>
+              <span className="text-xs font-black uppercase tracking-widest">총 수입</span>
             </div>
             <div className="text-3xl font-black italic serif tabular-nums tracking-tighter text-green-400">
               +₩{incomeTotal.toLocaleString()}
@@ -152,7 +159,7 @@ export default function AdminFinanceManager() {
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-3 text-white/40">
               <TrendingDown size={18} className="text-red-400" />
-              <span className="text-xs font-black uppercase tracking-widest">Total Expenses</span>
+              <span className="text-xs font-black uppercase tracking-widest">총 지출</span>
             </div>
             <div className="text-3xl font-black italic serif tabular-nums tracking-tighter text-red-400">
               -₩{expenseTotal.toLocaleString()}
@@ -168,7 +175,7 @@ export default function AdminFinanceManager() {
           <div className="glass rounded-[40px] border border-white/10 p-8">
             <form onSubmit={handleAdd} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">Type</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">구분</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as any, category: CATEGORIES[e.target.value as 'income' | 'expense'][0] })}
@@ -180,7 +187,7 @@ export default function AdminFinanceManager() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">Amount</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">금액</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -194,7 +201,7 @@ export default function AdminFinanceManager() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">Category</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">카테고리</label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -207,7 +214,7 @@ export default function AdminFinanceManager() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">Date</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">날짜</label>
                 <input
                   type="date"
                   value={formData.date}
@@ -217,7 +224,7 @@ export default function AdminFinanceManager() {
               </div>
 
               <div className="sm:col-span-2 md:col-span-3 space-y-2">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">Note (Optional)</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-2">메모 (선택)</label>
                 <input
                   type="text"
                   value={formData.note}
@@ -242,18 +249,18 @@ export default function AdminFinanceManager() {
           {/* Transactions Table */}
           <div className="glass rounded-[40px] border border-white/10 overflow-hidden">
             <div className="p-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
-              <h3 className="text-sm font-black uppercase tracking-widest text-white/60">Recent Transactions</h3>
-              <span className="text-[10px] font-bold text-white/20 italic">Tip: 금액을 더블클릭하여 수정</span>
+              <h3 className="text-sm font-black uppercase tracking-widest text-white/60">최근 거래 내역</h3>
+              <span className="text-[10px] font-bold text-white/20 italic">도움말: 금액을 더블클릭하여 수정</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="text-[10px] font-black text-white/20 uppercase tracking-widest text-left">
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Category</th>
-                    <th className="px-6 py-4">Note</th>
-                    <th className="px-6 py-4 text-right">Amount</th>
-                    <th className="px-6 py-4 text-center">Action</th>
+                    <th className="px-6 py-4">날짜</th>
+                    <th className="px-6 py-4">카테고리</th>
+                    <th className="px-6 py-4">메모</th>
+                    <th className="px-6 py-4 text-right">금액</th>
+                    <th className="px-6 py-4 text-center">동작</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -334,7 +341,7 @@ export default function AdminFinanceManager() {
           <div className="glass rounded-[40px] border border-white/10 p-8 h-full min-h-[400px] flex flex-col">
             <div className="flex items-center gap-3 text-white/40 mb-8">
               <PieChartIcon size={18} className="text-lime" />
-              <span className="text-xs font-black uppercase tracking-widest">Spending Analysis</span>
+              <span className="text-xs font-black uppercase tracking-widest">지출 상세 분석</span>
             </div>
             
             <div className="flex-1 w-full min-h-[300px]">

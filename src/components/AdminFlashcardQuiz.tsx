@@ -101,25 +101,29 @@ export default function AdminFlashcardQuiz() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-3xl mx-auto space-y-8 py-4 sm:py-10"
+      className="max-w-3xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
       {/* Header & Progress */}
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex items-center gap-3 text-lime">
-          <Brain className="animate-pulse" />
-          <h2 className="text-2xl font-black italic serif underline decoration-lime/50 underline-offset-8">플래시 카드 퀴즈</h2>
+      <div className="flex flex-col items-center space-y-6 text-center">
+        <div className="flex items-center gap-4 text-lime">
+          <div className="w-12 h-12 rounded-2xl bg-lime/10 flex items-center justify-center">
+            <Brain size={28} className="animate-pulse" />
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-black italic serif underline decoration-lime/50 underline-offset-12">플래시 카드</h2>
         </div>
         
-        <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden border border-white/10">
-          <motion.div 
-            className="h-full bg-lime" 
-            animate={{ width: `${(memorizedCount / INITIAL_CARDS.length) * 100}%` }}
-          />
-        </div>
-        
-        <div className="flex justify-between w-full text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/40">
-          <span>진행 상황: {memorizedCount} / {INITIAL_CARDS.length}</span>
-          <span>남은 카드: {cards.length}</span>
+        <div className="w-full space-y-4 pt-4">
+          <div className="w-full bg-white/5 h-3 rounded-full overflow-hidden border border-white/10 shadow-inner">
+            <motion.div 
+              className="h-full bg-lime shadow-[0_0_15px_rgba(163,230,53,0.5)]" 
+              animate={{ width: `${(memorizedCount / INITIAL_CARDS.length) * 100}%` }}
+            />
+          </div>
+          
+          <div className="flex justify-between w-full text-[11px] sm:text-xs font-black uppercase tracking-[0.2em] text-white/30">
+            <span>진행률: {memorizedCount} / {INITIAL_CARDS.length}</span>
+            <span>잔여: {cards.length}</span>
+          </div>
         </div>
       </div>
 
@@ -142,7 +146,7 @@ export default function AdminFlashcardQuiz() {
             <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 opacity-30">
                <BookOpen size={14} />
                <span className="text-[10px] font-black uppercase tracking-tighter">
-                 {isFlipped ? 'ANSWER' : 'QUESTION'}
+                 {isFlipped ? '정답' : '질문'}
                </span>
             </div>
 
@@ -180,7 +184,7 @@ export default function AdminFlashcardQuiz() {
 
       <div className="pt-4 flex items-center justify-center gap-2 text-white/20">
         <div className="h-[1px] w-8 bg-current" />
-        <p className="text-[10px] font-bold uppercase tracking-widest italic">Vibe Coding - Flashcard Module</p>
+        <p className="text-[10px] font-bold uppercase tracking-widest italic">바이브 코딩 - 플래시카드 모듈</p>
         <div className="h-[1px] w-8 bg-current" />
       </div>
     </motion.div>

@@ -211,26 +211,24 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-6 max-w-4xl mx-auto"
+      className="max-w-4xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="bg-lime/20 p-2 rounded-lg">
-            <ListTodo className="text-lime" size={24} />
-          </div>
-          <h2 className="text-2xl sm:text-3xl serif italic">1.할일목록</h2>
+      <div className="flex flex-col lg:flex-row items-center lg:items-end justify-between gap-8 border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">오늘의 할 일</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black">효율성 프로토콜 v4.0</p>
         </div>
         
-        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl p-1.5 w-full sm:w-auto justify-between sm:justify-start">
+        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-[28px] p-2.5 backdrop-blur-md shadow-xl w-full sm:w-auto">
           <button 
             onClick={() => changeDay(-1)}
-            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all flex-shrink-0"
+            className="p-3 hover:bg-white/10 rounded-2xl text-white/60 hover:text-white transition-all flex-shrink-0"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={22} />
           </button>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-xl text-white font-bold cursor-pointer relative group flex-1 sm:flex-none justify-center">
-            <CalendarIcon size={16} className="text-lime" />
-            <span className="text-sm">{selectedDate}</span>
+          <div className="flex items-center gap-3 px-6 py-3 bg-white/10 rounded-2xl text-white font-black cursor-pointer relative group flex-1 sm:flex-none justify-center border border-white/10">
+            <CalendarIcon size={18} className="text-lime" />
+            <span className="text-[13px] tabular-nums tracking-wider">{selectedDate}</span>
             <input 
               type="date" 
               value={selectedDate}
@@ -240,44 +238,44 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
           </div>
           <button 
             onClick={() => changeDay(1)}
-            className="p-2 hover:bg-white/10 rounded-xl text-white/60 hover:text-white transition-all flex-shrink-0"
+            className="p-3 hover:bg-white/10 rounded-2xl text-white/60 hover:text-white transition-all flex-shrink-0"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={22} />
           </button>
         </div>
       </div>
 
-      <div className="glass p-4 sm:p-8 rounded-[32px] border border-white/10 space-y-6 sm:y-8">
-        <form onSubmit={handleAddTodo} className="space-y-3">
-          <div className="flex flex-col sm:flex-row gap-3">
+      <div className="glass p-6 sm:p-10 rounded-[40px] border border-white/10 space-y-8 sm:y-10">
+        <form onSubmit={handleAddTodo} className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="새로운 할 일..."
-              className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 sm:py-4 flex-grow focus:border-lime outline-none transition-all text-white text-base sm:text-lg placeholder:text-white/20"
+              placeholder="무엇을 해야 하나요?"
+              className="bg-white/5 border border-white/10 rounded-[24px] px-6 py-4 sm:py-5 flex-grow focus:border-lime outline-none transition-all text-white text-lg sm:text-xl placeholder:text-white/20"
               disabled={isAdding}
             />
             <button
               type="submit"
               disabled={isAdding || !newTodo.trim()}
-              className="bg-lime text-forest px-6 py-3.5 sm:py-4 rounded-2xl font-bold hover:shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="bg-lime text-forest px-8 py-4 sm:py-5 rounded-[24px] font-black hover:shadow-[0_0_30px_rgba(163,230,53,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-xl"
             >
-              {isAdding ? <Loader2 size={24} className="animate-spin" /> : <Plus size={24} />}
-              <span className="font-bold">추가</span>
+              {isAdding ? <Loader2 size={24} className="animate-spin" /> : <Plus size={24} strokeWidth={3} />}
+              <span className="uppercase tracking-[0.1em]">추가</span>
             </button>
           </div>
           
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 px-1">
-            <div className="flex items-center gap-2 sm:gap-3 text-sm">
-              <span className="text-white/40 font-medium whitespace-nowrap">예정일:</span>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 px-2">
+            <div className="flex items-center gap-3 sm:gap-4 text-sm">
+              <span className="text-white/30 font-black uppercase tracking-widest text-[10px]">생성 예정일:</span>
               <div className="relative group">
                 <input 
                   type="date" 
                   value={newTodoDate}
                   onChange={(e) => setNewTodoDate(e.target.value)}
-                  className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-lime focus:bg-white/10 transition-all cursor-pointer hover:border-white/20 select-none text-xs sm:text-sm"
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white font-bold outline-none focus:border-lime focus:bg-white/10 transition-all cursor-pointer hover:border-white/20 select-none text-xs sm:text-sm"
                   style={{ colorScheme: 'dark' }}
                 />
                 {newTodoDate === getTodayStr() && (
@@ -323,25 +321,25 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     className={cn(
-                      "group relative p-4 sm:p-5 rounded-3xl flex items-center gap-2 sm:gap-4 transition-all duration-300 border-2 active:scale-[0.99] cursor-pointer",
+                      "group relative p-6 sm:p-8 rounded-[32px] flex items-center gap-4 sm:gap-6 transition-all duration-300 border-2 active:scale-[0.99] cursor-pointer",
                       todo.completed 
                         ? "bg-white/5 border-transparent opacity-40 shadow-none" 
-                        : "bg-white/5 border-white/5 hover:border-white/20 hover:shadow-xl"
+                        : "bg-white/5 border-white/5 hover:border-white/20 hover:shadow-2xl hover:bg-white/10"
                     )}
                     onClick={() => !editingId && handleToggleTodo(todo)}
                   >
-                    <div className="text-white/10 hover:text-white/30 p-1 cursor-grab active:cursor-grabbing flex-shrink-0">
-                      <GripVertical size={20} />
+                    <div className="text-white/10 hover:text-white/30 p-2 cursor-grab active:cursor-grabbing flex-shrink-0">
+                      <GripVertical size={24} />
                     </div>
 
                     <div className={cn(
-                      "transition-colors flex-shrink-0",
-                      todo.completed ? "text-lime" : "text-white/20 group-hover:text-white/40"
+                      "transition-all duration-300 flex-shrink-0",
+                      todo.completed ? "text-lime scale-110" : "text-white/20 group-hover:text-white/40 group-hover:scale-110"
                     )}>
                       {todo.completed ? (
-                        <CheckCircle size={24} strokeWidth={2.5} />
+                        <CheckCircle size={32} strokeWidth={2.5} />
                       ) : (
-                        <Circle size={24} strokeWidth={2} />
+                        <Circle size={32} strokeWidth={2} />
                       )}
                     </div>
                     
@@ -374,14 +372,14 @@ export default function AdminTodoList({ showAlert, showConfirm }: AdminTodoListP
                         </div>
                       </div>
                     ) : (
-                      <span 
-                        className={cn(
-                          "flex-grow text-base sm:text-lg transition-all duration-500 truncate",
-                          todo.completed ? "text-white line-through decoration-lime/50 decoration-2" : "text-white font-medium"
-                        )}
-                      >
-                        {todo.text}
-                      </span>
+                        <span 
+                          className={cn(
+                            "flex-grow text-lg sm:text-xl transition-all duration-500 truncate leading-relaxed",
+                            todo.completed ? "text-white/60 line-through decoration-lime/50 decoration-2" : "text-white font-black"
+                          )}
+                        >
+                          {todo.text}
+                        </span>
                     )}
 
                     <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>

@@ -113,7 +113,7 @@ export default function AdminHabitTracker() {
       d.setDate(d.getDate() - (6 - i));
       return {
         dateStr: d.toISOString().split('T')[0],
-        dayName: d.toLocaleDateString('en-US', { weekday: 'narrow' })
+        dayName: d.toLocaleDateString('ko-KR', { weekday: 'narrow' })
       };
     });
   }, []);
@@ -122,23 +122,23 @@ export default function AdminHabitTracker() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto space-y-8 py-4 sm:py-10 px-4"
+      className="max-w-4xl mx-auto space-y-12 py-10 px-4 sm:px-6 md:px-0"
     >
       {/* Header & Stats */}
-      <div className="flex flex-col md:flex-row gap-6 md:items-end justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl sm:text-3xl font-black italic serif text-white">습관 관리 도구</h2>
-          <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Consistency Wins The Game</p>
+      <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between border-b border-white/5 pb-10">
+        <div className="space-y-4 text-center lg:text-left">
+          <h2 className="text-4xl sm:text-6xl font-black italic serif text-white tracking-tighter">습관 추적기</h2>
+          <p className="text-[12px] text-white/40 uppercase tracking-[0.5em] font-black mt-2">생활 루틴 프로토콜 v2.1</p>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-2xl border border-white/5">
-            <Trophy size={14} className="text-lime" />
-            <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">Active Habits: {habits.length}</span>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-4 px-6 py-4 bg-white/5 rounded-2xl border border-white/10">
+            <Trophy size={16} className="text-lime" />
+            <span className="text-[11px] font-black text-white/60 uppercase tracking-widest">활성 항목: {habits.length}</span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-lime/10 rounded-2xl border border-lime/10 ring-1 ring-lime/20">
-            <Flame size={14} className="text-lime animate-pulse" />
-            <span className="text-[10px] font-black text-lime uppercase tracking-widest">Keep It Up!</span>
+          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-4 px-6 py-4 bg-lime/10 rounded-2xl border border-lime/10 ring-1 ring-lime/20">
+            <Flame size={16} className="text-lime animate-pulse" />
+            <span className="text-[11px] font-black text-lime uppercase tracking-widest">계속 도전하세요</span>
           </div>
         </div>
       </div>
@@ -210,12 +210,12 @@ export default function AdminHabitTracker() {
                         <div className="flex items-center gap-1">
                           <Flame size={12} className={cn(streak > 0 ? "text-orange-400" : "text-white/10")} />
                           <span className={cn("text-[10px] font-black uppercase tracking-widest tabular-nums", streak > 0 ? "text-orange-400" : "text-white/10")}>
-                            {streak} Day Streak
+                            {streak}일 연속 달성
                           </span>
                         </div>
                         <div className="h-1 w-1 rounded-full bg-white/10" />
                         <span className="text-[10px] font-bold text-white/20 italic">
-                          Start date: {new Date(habit.createdAt).toLocaleDateString()}
+                          시작일: {new Date(habit.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
@@ -224,7 +224,7 @@ export default function AdminHabitTracker() {
                   {/* Middle: 7 Day Calendar */}
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between px-1">
-                      <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">Last 7 Days</span>
+                      <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">최근 7일 현황</span>
                     </div>
                     <div className="flex gap-2">
                       {last7Days.map(({ dateStr, dayName }) => {
@@ -291,11 +291,11 @@ export default function AdminHabitTracker() {
          <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-lime" />
-              <span>Local Storage Active</span>
+              <span>로컬 저장소 활성</span>
             </div>
             <div className="flex items-center gap-2">
               <TrendingUp size={10} />
-              <span>Streak Engine v1.2</span>
+              <span>스트릭 엔진 v1.2</span>
             </div>
          </div>
       </div>

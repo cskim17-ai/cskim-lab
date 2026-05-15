@@ -154,41 +154,41 @@ export default function AdminPaletteGenerator({
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="space-y-12 max-w-4xl mx-auto pb-20"
+      className="space-y-12 max-w-4xl mx-auto pb-20 px-4 sm:px-6 md:px-0"
     >
       {/* Hero Section */}
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-lime/10 border border-lime/20 text-lime text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(163,230,53,0.1)]">
-          <Sparkles size={14} />
-          AI Color Intelligence
+      <div className="text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-lime/10 border border-lime/20 text-lime text-[10px] font-black uppercase tracking-widest shadow-[0_0_30px_rgba(163,230,53,0.15)]">
+          <Sparkles size={16} />
+          AI 컬러 인텔리전스
         </div>
-        <h2 className="text-3xl sm:text-5xl font-black italic serif tracking-tighter text-white">
+        <h2 className="text-4xl sm:text-6xl font-black italic serif tracking-tighter text-white">
           AI 팔레트 생성기
         </h2>
-        <p className="text-white/40 font-medium max-w-md mx-auto leading-relaxed text-sm sm:text-base">
-          어떤 단어든 입력해보세요. AI가 그 감각을 색상으로 번역해드립니다.
+        <p className="text-white/40 font-bold max-w-md mx-auto leading-relaxed text-sm sm:text-lg">
+          어떤 단어든 입력해보세요. <br className="hidden sm:block" /> AI가 그 감각을 색상으로 번역해드립니다.
         </p>
       </div>
 
       {/* Main Generator Interface */}
       <div className="space-y-8">
         {/* Input Box and Button */}
-        <div className="flex flex-col sm:flex-row gap-3 p-2 bg-white/5 border border-white/10 rounded-[28px] sm:rounded-[32px] backdrop-blur-3xl shadow-2xl focus-within:border-lime/50 transition-all">
+        <div className="flex flex-col sm:flex-row gap-4 p-3 bg-white/5 border border-white/10 rounded-[32px] sm:rounded-[40px] backdrop-blur-3xl shadow-2xl focus-within:border-lime transition-all overflow-hidden">
           <input 
             type="text"
             placeholder="예: 차가운 달빛, 서울의 밤..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && generatePaletteFromAI()}
-            className="flex-1 bg-transparent px-6 py-4 outline-none text-white font-medium placeholder:text-white/20 text-sm sm:text-base"
+            className="flex-1 bg-transparent px-6 py-4 sm:py-5 outline-none text-white font-bold placeholder:text-white/10 text-lg focus:placeholder:opacity-0 transition-opacity"
           />
           <button
             onClick={generatePaletteFromAI}
             disabled={isGenerating}
-            className="flex items-center justify-center gap-2 bg-lime text-forest px-8 py-4 rounded-[20px] sm:rounded-[24px] font-black hover:shadow-[0_0_40px_rgba(163,230,53,0.4)] disabled:opacity-50 transition-all active:scale-95"
+            className="flex items-center justify-center gap-3 bg-lime text-forest px-10 py-5 rounded-[24px] sm:rounded-[32px] font-black hover:shadow-[0_0_50px_rgba(163,230,53,0.5)] disabled:opacity-50 transition-all active:scale-95 shadow-2xl"
           >
-            {isGenerating ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
-            생성
+            {isGenerating ? <Loader2 className="animate-spin" size={24} /> : <Send size={24} />}
+            <span className="uppercase tracking-widest text-sm">생성</span>
           </button>
         </div>
 
