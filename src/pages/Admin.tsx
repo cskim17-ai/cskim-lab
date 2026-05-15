@@ -30,16 +30,52 @@ import AdminRealtimeChat from '../components/AdminRealtimeChat';
 import AdminRecipeFinder from '../components/AdminRecipeFinder';
 import AdminMarkdownBlog from '../components/AdminMarkdownBlog';
 import AdminHabitTracker from '../components/AdminHabitTracker';
+import AdminVirtualGallery from '../components/AdminVirtualGallery';
+import AdminFinanceDashboard from '../components/AdminFinanceDashboard';
+import AdminLanguageFlashcards from '../components/AdminLanguageFlashcards';
+import AdminMeditationTimer from '../components/AdminMeditationTimer';
+import AdminQuizApp from '../components/AdminQuizApp';
+import AdminFitnessTracker from '../components/AdminFitnessTracker';
+import AdminCountdownTimer from '../components/AdminCountdownTimer';
+import AdminMovieApp from '../components/AdminMovieApp';
+import AdminDutchPay from '../components/AdminDutchPay';
+import AdminPortfolioBuilder from '../components/AdminPortfolioBuilder';
+import AdminWorkoutPlanner from '../components/AdminWorkoutPlanner';
+import AdminStoryGame from '../components/AdminStoryGame';
+import AdminMusicPlaylist from '../components/AdminMusicPlaylist';
+import AdminWeatherAlertSystem from '../components/AdminWeatherAlertSystem';
+import AdminReadingTracker from '../components/AdminReadingTracker';
+import AdminCurrencyConverter from '../components/AdminCurrencyConverter';
+import AdminPromptLibrary from '../components/AdminPromptLibrary';
+import AdminEmotionDiary from '../components/AdminEmotionDiary';
+import AdminPhotoGallery from '../components/AdminPhotoGallery';
+import AdminTravelBucketList from '../components/AdminTravelBucketList';
+import AdminNewsReader from '../components/AdminNewsReader';
+import AdminPomodoroTimer from '../components/AdminPomodoroTimer';
+import AdminStockWatchlist from '../components/AdminStockWatchlist';
+import AdminPollCreator from '../components/AdminPollCreator';
+import AdminPlantTracker from '../components/AdminPlantTracker';
+import AdminRecipeNutrition from '../components/AdminRecipeNutrition';
+import AdminDailyAffirmation from '../components/AdminDailyAffirmation';
+import AdminMemeGenerator from '../components/AdminMemeGenerator';
+import AdminTranslator from '../components/AdminTranslator';
+import AdminSnippetManager from '../components/AdminSnippetManager';
+import AdminWhiteboard from '../components/AdminWhiteboard';
+import AdminMovieBooking from '../components/AdminMovieBooking';
+import AdminMindMap from '../components/AdminMindMap';
+import AdminRetirementCountdown from '../components/AdminRetirementCountdown';
+import AdminSocialScheduler from '../components/AdminSocialScheduler';
+import AdminUrlShortener from '../components/AdminUrlShortener';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState<'nfcTags' | 'lab' | 'vibeCoding' | 'gasReceipts' | 'paletteGenerator' | 'interactiveMap' | 'flashcardQuiz' | 'passwordGenerator' | 'aiChat' | 'worldWeather' | 'personalFinance' | 'placeholder' | 'realtimeChat' | 'recipeFinder' | 'markdownBlog' | 'habitTracker'>(() => {
+  const [activeTab, setActiveTab] = useState<'nfcTags' | 'lab' | 'vibeCoding' | 'gasReceipts' | 'paletteGenerator' | 'interactiveMap' | 'flashcardQuiz' | 'passwordGenerator' | 'aiChat' | 'worldWeather' | 'personalFinance' | 'placeholder' | 'realtimeChat' | 'recipeFinder' | 'markdownBlog' | 'habitTracker' | 'virtualGallery' | 'financeDashboard' | 'languageFlashcards' | 'meditationTimer' | 'quizApp' | 'fitnessTracker' | 'countdownTimer' | 'movieApp' | 'dutchPay' | 'portfolioBuilder' | 'workoutPlanner' | 'storyGame' | 'musicPlaylist' | 'weatherAlert' | 'readingTracker' | 'currencyConverter' | 'promptLibrary' | 'emotionDiary' | 'photoGallery' | 'travelBucket' | 'newsReader' | 'pomodoroTimer' | 'stockWatchlist' | 'pollCreator' | 'plantTracker' | 'recipeNutrition' | 'affirmationDisplay' | 'memeGenerator' | 'translator' | 'snippetManager' | 'whiteboard' | 'movieBooking' | 'mindMap' | 'retirementCountdown' | 'socialScheduler' | 'urlShortener' | 'vibe3_placeholder' | 'vibe4_placeholder' | 'vibe5_placeholder'>(() => {
     const saved = localStorage.getItem('lastAdminTab');
-    if (saved && ['nfcTags', 'lab', 'vibeCoding', 'gasReceipts', 'paletteGenerator', 'interactiveMap', 'flashcardQuiz', 'passwordGenerator', 'aiChat', 'worldWeather', 'personalFinance', 'placeholder', 'realtimeChat', 'recipeFinder', 'markdownBlog', 'habitTracker'].includes(saved)) {
-      return saved as 'nfcTags' | 'lab' | 'vibeCoding' | 'gasReceipts' | 'paletteGenerator' | 'interactiveMap' | 'flashcardQuiz' | 'passwordGenerator' | 'aiChat' | 'worldWeather' | 'personalFinance' | 'placeholder' | 'realtimeChat' | 'recipeFinder' | 'markdownBlog' | 'habitTracker';
+    if (saved && ['nfcTags', 'lab', 'vibeCoding', 'gasReceipts', 'paletteGenerator', 'interactiveMap', 'flashcardQuiz', 'passwordGenerator', 'aiChat', 'worldWeather', 'personalFinance', 'placeholder', 'realtimeChat', 'recipeFinder', 'markdownBlog', 'habitTracker', 'virtualGallery', 'financeDashboard', 'languageFlashcards', 'meditationTimer', 'quizApp', 'fitnessTracker', 'countdownTimer', 'movieApp', 'dutchPay', 'portfolioBuilder', 'workoutPlanner', 'storyGame', 'musicPlaylist', 'weatherAlert', 'readingTracker', 'currencyConverter', 'promptLibrary', 'emotionDiary', 'photoGallery', 'travelBucket', 'newsReader', 'pomodoroTimer', 'stockWatchlist', 'pollCreator', 'plantTracker', 'recipeNutrition', 'affirmationDisplay', 'memeGenerator', 'translator', 'snippetManager', 'whiteboard', 'movieBooking', 'mindMap', 'retirementCountdown', 'socialScheduler', 'urlShortener', 'vibe3_placeholder', 'vibe4_placeholder', 'vibe5_placeholder'].includes(saved)) {
+      return saved as any;
     }
     return 'nfcTags';
   });
@@ -68,7 +104,7 @@ export default function Admin() {
     },
     {
       id: 'vibe1',
-      label: '바이브코딩1',
+      label: '바이1',
       items: [
         { id: 'vibeCoding', label: '1.할일목록' },
         { id: 'gasReceipts', label: '주유영수증' },
@@ -83,13 +119,70 @@ export default function Admin() {
     },
     {
       id: 'vibe2',
-      label: '바이브코딩2',
+      label: '바이2',
       items: [
         { id: 'realtimeChat', label: '11. 실시간 채팅' },
         { id: 'recipeFinder', label: '12.레시피 찾기' },
         { id: 'markdownBlog', label: '13. 마크다운 블로그' },
         { id: 'habitTracker', label: '14. 습관 관리' },
+        { id: 'virtualGallery', label: '15. 가상 갤러리' },
+        { id: 'financeDashboard', label: '16. 개인 재무 대시보드' },
+        { id: 'languageFlashcards', label: '17. 언어학습 플래시 카드' },
+        { id: 'meditationTimer', label: '18. 명상 타이머' },
+        { id: 'quizApp', label: '19. 대화형 퀴즈 앱' },
+        { id: 'fitnessTracker', label: '20. 피트니스 트래커' },
         { id: 'placeholder', label: '준비 중...' },
+      ]
+    },
+    {
+      id: 'vibe3',
+      label: '바이3',
+      items: [
+        { id: 'countdownTimer', label: '21. 카운트다운 타이머' },
+        { id: 'movieApp', label: '22. 영화 추천' },
+        { id: 'dutchPay', label: '23. 더치페이' },
+        { id: 'portfolioBuilder', label: '24. 포트폴리오' },
+        { id: 'workoutPlanner', label: '25. 피트니스 계획' },
+        { id: 'storyGame', label: '26. 인터랙티브 스토리 게임' },
+        { id: 'musicPlaylist', label: '27. 음악 플레이리스트' },
+        { id: 'weatherAlert', label: '28. 날씨 경보 시스템' },
+        { id: 'readingTracker', label: '29. 독서 기록 관리기' },
+        { id: 'currencyConverter', label: '30. 환율 변환기' },
+        { id: 'vibe3_placeholder', label: '준비 중...' },
+      ]
+    },
+    {
+      id: 'vibe4',
+      label: '바이4',
+      items: [
+        { id: 'promptLibrary', label: '31. 프롬프트 라이브러리' },
+        { id: 'emotionDiary', label: '32. 감정 다이어리 앱' },
+        { id: 'photoGallery', label: '33. 필터 기능 사진 갤러리' },
+        { id: 'travelBucket', label: '34. 여행 버킷 리스트' },
+        { id: 'newsReader', label: '35. 맞춤형 뉴스 리더' },
+        { id: 'pomodoroTimer', label: '36. 작업 뽀모도로 타이머' },
+        { id: 'stockWatchlist', label: '37. 주식 시장 관심 종목' },
+        { id: 'pollCreator', label: '38. 온라인 투표 작성' },
+        { id: 'plantTracker', label: '39. 가상 식물 관리기' },
+        { id: 'recipeNutrition', label: '40. 레시피 영양 계산기' },
+        { id: 'vibe4_placeholder', label: '준비 중...' },
+      ]
+    },
+    {
+      id: 'vibe5',
+      label: '바이5',
+      items: [
+        { id: 'affirmationDisplay', label: '41. 오늘의 긍정문' },
+        { id: 'memeGenerator', label: '42. 사진 밈 생성기' },
+        { id: 'translator', label: '43. 언어 번역기' },
+        { id: 'snippetManager', label: '44. 코드 조각 관리자' },
+        { id: 'whiteboard', label: '45. 가상 화이트보드' },
+        { id: 'movieBooking', label: '46. 영화 티켓 예매' },
+        { id: 'mindMap', label: '47. 마인드맵' },
+        { id: 'retirementCountdown', label: '48. 은퇴 카운트다운' },
+        { id: 'socialScheduler', label: '49. 소셜 게시물 예약' },
+        { id: 'urlShortener', label: '50. 간단한 URL 단축기' },
+        { id: 'vibe5_placeholder', label: '준비 중...' },
       ]
     }
   ];
@@ -370,6 +463,42 @@ export default function Admin() {
           {activeTab === 'recipeFinder' && <AdminRecipeFinder />}
           {activeTab === 'markdownBlog' && <AdminMarkdownBlog />}
           {activeTab === 'habitTracker' && <AdminHabitTracker />}
+          {activeTab === 'virtualGallery' && <AdminVirtualGallery />}
+          {activeTab === 'financeDashboard' && <AdminFinanceDashboard />}
+          {activeTab === 'languageFlashcards' && <AdminLanguageFlashcards />}
+          {activeTab === 'meditationTimer' && <AdminMeditationTimer />}
+          {activeTab === 'quizApp' && <AdminQuizApp />}
+          {activeTab === 'fitnessTracker' && <AdminFitnessTracker />}
+          {activeTab === 'countdownTimer' && <AdminCountdownTimer />}
+          {activeTab === 'movieApp' && <AdminMovieApp />}
+          {activeTab === 'dutchPay' && <AdminDutchPay />}
+          {activeTab === 'portfolioBuilder' && <AdminPortfolioBuilder />}
+          {activeTab === 'workoutPlanner' && <AdminWorkoutPlanner />}
+          {activeTab === 'storyGame' && <AdminStoryGame />}
+          {activeTab === 'musicPlaylist' && <AdminMusicPlaylist />}
+          {activeTab === 'weatherAlert' && <AdminWeatherAlertSystem />}
+          {activeTab === 'readingTracker' && <AdminReadingTracker />}
+          {activeTab === 'currencyConverter' && <AdminCurrencyConverter />}
+          {activeTab === 'promptLibrary' && <AdminPromptLibrary />}
+          {activeTab === 'emotionDiary' && <AdminEmotionDiary />}
+          {activeTab === 'photoGallery' && <AdminPhotoGallery />}
+          {activeTab === 'travelBucket' && <AdminTravelBucketList />}
+          { activeTab === 'newsReader' && <AdminNewsReader /> }
+          { activeTab === 'pomodoroTimer' && <AdminPomodoroTimer /> }
+          { activeTab === 'stockWatchlist' && <AdminStockWatchlist /> }
+          { activeTab === 'pollCreator' && <AdminPollCreator /> }
+          { activeTab === 'plantTracker' && <AdminPlantTracker /> }
+          { activeTab === 'recipeNutrition' && <AdminRecipeNutrition /> }
+          { activeTab === 'affirmationDisplay' && <AdminDailyAffirmation /> }
+          { activeTab === 'memeGenerator' && <AdminMemeGenerator /> }
+          { activeTab === 'translator' && <AdminTranslator /> }
+          { activeTab === 'snippetManager' && <AdminSnippetManager /> }
+          { activeTab === 'whiteboard' && <AdminWhiteboard /> }
+          { activeTab === 'movieBooking' && <AdminMovieBooking /> }
+          { activeTab === 'mindMap' && <AdminMindMap /> }
+          { activeTab === 'retirementCountdown' && <AdminRetirementCountdown /> }
+          { activeTab === 'socialScheduler' && <AdminSocialScheduler /> }
+          { activeTab === 'urlShortener' && <AdminUrlShortener /> }
         </div>
       </main>
 
