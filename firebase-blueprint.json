@@ -139,6 +139,53 @@
         "lastSeen": { "type": "string", "format": "date-time" }
       },
       "required": ["userId", "nickname", "lastSeen"]
+    },
+    "meditation_setting": {
+      "title": "Meditation Setting",
+      "description": "Last used meditation timer setting",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "lastMinutes": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "lastMinutes", "updatedAt"]
+    },
+    "fitness_log": {
+      "title": "Fitness Log",
+      "description": "Daily fitness metrics log",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "steps": { "type": "integer" },
+        "calories": { "type": "integer" },
+        "minutes": { "type": "integer" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "steps", "calories", "minutes", "date"]
+    },
+    "event_timer": {
+      "title": "Event Timer",
+      "description": "Event countdown timer data",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "targetDate": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "targetDate", "createdAt"]
+    },
+    "movie_favorite": {
+      "title": "Movie Favorite",
+      "description": "User favorite movie record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "movie": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "movie", "createdAt"]
     }
   },
   "firestore": {
@@ -195,6 +242,22 @@
     "chat_presence/{userId}": {
       "schema": "chat_presence",
       "description": "User presence data"
+    },
+    "meditation_settings/{userId}": {
+      "schema": "meditation_setting",
+      "description": "User meditation settings"
+    },
+    "fitness_logs/{logId}": {
+      "schema": "fitness_log",
+      "description": "Fitness performance records"
+    },
+    "event_timers/{timerId}": {
+      "schema": "event_timer",
+      "description": "Event countdown timers"
+    },
+    "movie_favorites/{favId}": {
+      "schema": "movie_favorite",
+      "description": "User favorite movies"
     }
   }
 }

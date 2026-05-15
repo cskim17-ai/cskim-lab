@@ -170,6 +170,64 @@ service cloud.firestore {
                data.lastSeen == request.time;
       }
     }
+
+    // Meditation Settings
+    match /meditation_settings/{userId} {
+      allow read: if (userId == authUid()) || isAdmin();
+      allow write: if (userId == authUid()) && isValidMeditationSetting(incoming());
+
+      function isValidMeditationSetting(data) {
+        return data.keys().hasAll(['userId', 'lastMinutes', 'updatedAt']) &&
+               data.userId == userId &&
+               data.lastMinutes is int &&
+               data.lastMinutes >= 1 && data.lastMinutes <= 120 &&
+               data.updatedAt == request.time;
+      }
+    }
+
+    // Fitness Logs
+    match /fitness_logs/{logId} {
+      allow read: if (resource.data.userId == authUid()) || isAdmin();
+      allow create: if (incoming().userId == authUid()) && isValidFitnessLog(incoming());
+      
+      function isValidFitnessLog(data) {
+        return data.keys().hasAll(['userId', 'steps', 'calories', 'minutes', 'date']) &&
+               data.userId == request.auth.uid &&
+               data.steps is int && data.steps >= 0 &&
+               data.calories is int && data.calories >= 0 &&
+               data.minutes is int && data.minutes >= 0 &&
+               data.date == request.time;
+      }
+    }
+
+    // Event Timers
+    match /event_timers/{timerId} {
+      allow read: if (resource.data.userId == authUid()) || isAdmin();
+      allow create: if (incoming().userId == authUid()) && isValidEventTimer(incoming());
+      allow delete: if (resource.data.userId == authUid()) || isAdmin();
+
+      function isValidEventTimer(data) {
+        return data.keys().hasAll(['userId', 'name', 'targetDate', 'createdAt']) &&
+               data.userId == request.auth.uid &&
+               data.name is string && data.name.size() <= 200 &&
+               data.targetDate is timestamp &&
+               data.createdAt == request.time;
+      }
+    }
+    
+    // Movie Favorites
+    match /movie_favorites/{favId} {
+      allow read: if (resource.data.userId == authUid()) || isAdmin();
+      allow create: if (incoming().userId == authUid()) && isValidMovieFav(incoming());
+      allow delete: if (resource.data.userId == authUid()) || isAdmin();
+
+      function isValidMovieFav(data) {
+        return data.keys().hasAll(['userId', 'movie', 'createdAt']) &&
+               data.userId == request.auth.uid &&
+               data.movie is map &&
+               data.createdAt == request.time;
+      }
+    }
     
     // Connection test
     match /test/connection {
